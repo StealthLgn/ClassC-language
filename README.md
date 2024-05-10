@@ -441,8 +441,7 @@ class C :public B
 };
 ```
 __________
-## Exceptions\
-!! REMOVED !!
+## Exceptions
 ```
 [try] keyword removed
 ```
@@ -1296,6 +1295,9 @@ same as 'C', but...
 struct sizeof(MyStruct,32) //'struct MyStruct' should be a 32 bytes; if less/greather -- compiler error
 {
 };
+class sizeof(MyClass,16)
+{
+};
 ```
 ```
 enum sizeof(MyEnum); //ERROR! not allowed
@@ -1317,6 +1319,9 @@ ________
 same as 'C++', but...
 ```
 struct alignof(MyStruct,4) //'struct MyStruct' aligned by 4 bytes
+{
+};
+class alignof(MyClass,8)
 {
 };
 ```
