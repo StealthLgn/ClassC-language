@@ -19,6 +19,9 @@ INFLEXIBLE LANGUAGE
 ```
 flexibility does not equal opportunity
 ```
+```
+more 'discipline code'
+```
 
 ___________________________
 "Header" files, definitions
@@ -229,7 +232,7 @@ Read only attributes\
 [readonly] keyword
 
 !! STOP USING getters/accessors !!\
-!! STOP calling method as get*... !!
+!! STOP calling(naming) method as get*... !!
 
 ```
 class Point2D
@@ -298,6 +301,12 @@ interface IReadable {
 };
 ```
 ```
+interface IEmpty
+{
+    //ERROR! Interface can't be empty! At least one method pls
+};
+```
+```
 class StringReadable :public IReadable {...}; //read data from string\
 class FileReadable :public IReadable {...}; //read data from file stream
 ```
@@ -325,8 +334,10 @@ class FileStream :public IReadable, public IWritable {...}; //multi inheritance 
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
 ```
 ```
-[dynamic_cast] keyword\
+[dynamic_cast] keyword
 !! REMOVED !!
+dynamic_cast searching a dervied class...
+how ?? by vtable ?? dont touch vtable !!
 ```
 
 ________
