@@ -1325,6 +1325,7 @@ enum alignof(MyEnum); //ERROR! not allowed
 
 interface alignof(MyInterface); //ERROR! not allowed
 ```
+```
 void main()
 {
     const std::memorysize total = alignof(MyStruct); //should be 4 bytes
