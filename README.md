@@ -25,8 +25,8 @@ more 'discipline code'
 
 _____________________________
 The One Definition Rule (ODR)\
-"cannot have more than one definition by translation unit"
 ```
+"cannot have more than one definition by translation unit"
 enum
 function
 class
@@ -37,71 +37,86 @@ typedef
 
 ___________________________
 "Header" files, definitions
-
+```
 <myheader.ch>
+```
 
 _________________________________
 "Module" files, translation units
-
+```
 <mymodule.cc>
+```
 
 __________
 Data types
 
-*  bool\
-    8 bits\
-    accept only 1(true), 0(false) -- only one bit used
-
-*  char\
-    8 bits
-    [−127, +127]
-   
-*  signed char\
-    8 bits char, force signed\
-    [−127, +127]
-   
-*  unsigned char\
-    8 bits char, force unsigned\
-    [0, +255]
-
-*  wchar\
-    16 bits unsigned, unicode char\
-    [0, +65535]
-
-*  int8\
-    8 bit integer\
-    [−127, +127]
-  
-*  signed int8\
-    8 bit integer, force signed\
-    [−127, +127]
-  
-*  unsigned int8\
-    8 bit integer, force unsigned\
-    [0, +255]
-
-*  int16\
-    16 bit integer\
-    //keyword [short] for back-campat with 'C'\
-    [−32767, +32767]
-
-*  signed int16\
-    16 bit integer, force signed\
-    [−32767, +32767]
-
-*  unsigned int16\
-    16 bit integer, force unsigned\
-    [0, 65535]
-
-*  int32\
-    32 bit integer
-    //keyword [int] for back-campat with 'C'\
-    [−2147483647, +2147483647]
-  
-*  signed int32\
-    32 bit integer, force signed\
-    [−2147483647, +2147483647]
-  
+*  bool
+```
+8 bits
+only 1(true) or 0(false) -- only one bit used
+```
+*  char
+```
+8 bits
+[−127, +127]
+```
+*  signed char
+```
+8 bits char, force signed
+[−127, +127]
+```
+*  unsigned char
+```
+8 bits char, force unsigned
+[0, +255]
+```
+*  wchar
+```
+16 bits unsigned, unicode char
+[0, +65535]
+```
+*  int8
+```
+8 bit integer
+[−127, +127]
+```
+*  signed int8
+```
+8 bit integer, force signed
+[−127, +127]
+```
+*  unsigned int8
+```
+8 bit integer, force unsigned
+[0, +255]
+```
+*  int16
+```
+16 bit integer
+//keyword [short] for back-campat with 'C'
+[−32767, +32767]
+```
+*  signed int16
+```
+16 bit integer, force signed
+[−32767, +32767]
+```
+*  unsigned int16
+```
+16 bit integer, force unsigned
+[0, 65535]
+```
+*  int32
+```
+32 bit integer
+//keyword [int] for back-campat with 'C'
+[−2147483647, +2147483647]
+```
+*  signed int32
+```
+32 bit integer, force signed
+[−2147483647, +2147483647]
+```
 *  unsigned int32\
     32 bit integer, force unsigned\
     [0, 4294967295]
@@ -1061,7 +1076,7 @@ void main()
 {
     std::vector collection = collect(); //OK, 'collection' will be 'std::vector<int32>' as return value from 'collect()'
 
-    std::vector otherarr; //ERROR! couldn't deduce template parameter 'std::vector<T,Alloc>'
+    std::vector otherarr; //ERROR! couldn't deduce template parameter 'std::vector<T>'
 
     std::vector vec = { 0 , 1 , 2 }; //OK, use typename from constructor (initializator list with 'int32') -- no 'vec' is a 'std::vector<int32>'
 
@@ -1156,5 +1171,27 @@ extern "C"
     union
     {
     };
+}
+```
+
+______________
+std::allocator
+```
+namespace std
+{
+    typedef stream_size  memory_size;
+
+    interface allocator
+    {
+        virtual void* allocate( memory_size ) =0;
+
+        virtual bool deallocate( void* , memory_size ) =0;
+
+        virtual void* reallocate( void* , memory_size ) =0;
+
+        virtual memory_size size( const void* )const =0;
+    };
+
+    static allocator& malloc; //global heap allocation
 }
 ```
