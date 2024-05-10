@@ -126,7 +126,7 @@ Data types
     64 bit double floating-point
 
 *  double128\
-    //keyword [long double] for back-campat with 'C'\
+    //keyword [long double] for back-campat with 'C'
 
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
 
@@ -385,7 +385,7 @@ console/terminal\
 or something else to detect errors, but no 'goto'-style with jumps
 
 ____
-goto\
+goto
 ```
 [goto] keyword removed :)
 ```
@@ -480,10 +480,35 @@ void some( int32 aa ) {
     }
 }
 ```
+___________________
+Literal expressions
+```
+template< typename A , typename B > void some()
+{
+    literal if (A == B) //check type(A) equal to type(B), make compiler some smarter
+    {
+        literal char name[] = typename(A); //use 'typename()' keyword to GET typename as literal string by compiler
+    }
+    literal if (A < B) //check if type(A) is a base class for type(B)
+    { ... }
+    literal if (static(A)) //check if type(A) is a static
+    { ... }
+    literal if (virtual(A::~A)) //check if virtual destructor of type(A) (no std::super_puper_is_virtual_destrucotr< auto(typename..) something-something >::value)
+    { ... }
+    literal if (return(A::empty) == bool) //check if function A::empty return 'bool' type
+    { ... }
+    literal if (class(B)) //check if type(B) is a class (not struct, not int, not bool, not interface)
+    { ... }
+    literal if (interface(A))
+    { ... }
+    literal if (! return(A::size)) //check if function (A::size) return no value
+    literal if (return(A::size) == void) //same
+    { ... }
+}
+```
 
 ________________
-Move constructor\
-
+Move constructor
 ```
 class A
 {
@@ -669,4 +694,43 @@ ____________
 Non-Copyable\
 prevent copy objects -- singleton only
 
-?? 'noncopyable' keyword |or| 'class X true {...};' ??
+?? 'noncopyable' keyword ?? no, less keywords\
+use 'true' keyword instead
+```
+class X true //class X is non-copyable now
+{
+    X( const X& ); //ERROR! copy constructor is not allowed -- class X is non-copyable
+    X( X&& ); //ERROR! move constructor is not allowed
+    X& operator= ( const X& ); //ERROR! copy assignment operator is not allowed
+    X& operator= ( X&& ); //ERROR! same
+};
+```
+```
+struct F true { ... };
+```
+```
+interface I true; //ERROR! not allowed in interfaces -- interface can't be copy
+```
+
+____
+THIS\
+[this] keyword
+
+secondary constructors
+```
+class My
+{
+    //primary constructor
+    My( unsigned int32 , unsigned int32 )
+    {
+    }
+    //secondary constructor
+    My() :this(0,0) //use 'this' in initializators (Java style)
+    {
+    }
+    //secondary constructor
+    My( const Minimal& mm ) :this( mm.calculate() , mm.calculate() )
+    {
+    }
+};
+```
