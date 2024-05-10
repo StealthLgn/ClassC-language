@@ -628,3 +628,45 @@ namespace my
         class Range {...}; //class 'Range' by any type declared inside 'my' namespace or sub-namespaces
 }
 ```
+
+______
+Static\
+[static] keyword
+
+static classes/structures/interfaces
+```
+class NonDynamic static
+{
+    //prevent to create object dynamicly (operator new)
+
+    //can't containt 'operator new/delete'
+
+    //all derived types is static too
+};
+
+NonDynamic* obj = new NonDynamic(); //ERROR! 'class NonDynamic' is static
+
+NonDynamic* obj = new (mem_placement) NonDynamic(); //ERROR! 'class NonDynamic' is static
+
+NonDynamic obj; //OK, no dynamic
+
+NonDynamic* ptr = &obj; //?? what about pointers to static classes/structs/interfaces ??
+```
+static methods
+!! MINIMIZE STATIC METHODS AS POSIBLE !! DONT WRITE 'C'-PROCEDURE CODE !!
+```
+class File
+{
+    static void read( File& f ); //ERROR! can't use class type as parameter inside this class
+
+    void read( File& f ); //ERROR! same
+
+    void read(); //OK
+};
+```
+
+____________
+Non-Copyable\
+prevent copy objects -- singleton only
+
+?? 'noncopyable' keyword |or| 'class X true {...};' ??
