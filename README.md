@@ -1174,7 +1174,7 @@ Union
 ```
 [union] keyword
 ```
-It's destroy objects idea -- now it's just a memory :(
+It's destroy objects idea -- with union our object it's just a memory :(
 ```
 union
 {
