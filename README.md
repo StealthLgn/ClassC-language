@@ -147,8 +147,10 @@ Data types
     no data, used as return in functions
 
 __________
-Structures\
-[struct] keyword\
+Structures
+```
+[struct] keyword
+```
 same a 'C/C++', but...
 
 *  inheritance
@@ -170,8 +172,10 @@ can be an immutability type
 ```
 
 _______
-Classes\
-[class] keyword\
+Classes
+```
+[class] keyword
+```
 same a 'C/C++', but...
 
 *  inheritance
@@ -193,7 +197,9 @@ allow to use virtual destructors
 
 ____________
 Immutability
+```
 [const] keyword
+```
 
 All user-types (struct,class) is mutable by default\
 They can change state
@@ -237,13 +243,15 @@ void main() {
 ```
 
 __________
-Mutability\
+Mutability
+```
 [mutable] keyword
+```
 "C++": Field (attribute) of class can be changed in [const] method //bad name! method can't be a const, it's a something different
 but...
 ```
-class A {
-
+class A
+{
     mutable int32 m_value;
 
     void update()const {
@@ -266,15 +274,16 @@ class A {
 ```
 
 ____________________
-Read only attributes\
+Read only attributes
+```
 [readonly] keyword
-
+```
 !! STOP USING getters/accessors !!\
 !! STOP calling(naming) method as get*... !!
 
 ```
 class Point2D
-{ public:
+{public:
 
     readonly int32 posx,posy; //private attributes, but opened for read-only outside
 
@@ -283,11 +292,8 @@ class Point2D
 void main()
 {
     Point2D coords( 10 , 20 );
-
     std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory
-
     coords.posx = 11; //ERROR! read-only!
-
     coords.move( 11 , 21 ); //OK, public method; point will move itself
 }
 class Point3D :public Point2D
@@ -307,8 +313,10 @@ class Point3D :public Point2D
 ```
 
 __________
-Interfaces\
+Interfaces
+```
 [interface] keyword
+```
 ```
 interface IReadable {
 
@@ -324,14 +332,13 @@ interface IReadable {
     //the compiler does not generate a constructor (any one)
 
     //no destructor
-    //compile error
     //interface can't be deleted
     //any template T->~T() or call IReadable->~IReadable() -- compile error
     //the compiler does not generate a destructor
 
     //no copy assignment operator
     //operator=
-    //compile error
+    //the compiler does not generate a copy assignment operator
 
     bool is_ok()const; //OK, no 'virtual' required, it's pure virtual by default (because INTERFACE)
 
@@ -341,11 +348,11 @@ interface IReadable {
 ```
 interface IEmpty
 {
-    //ERROR! Interface can't be empty! At least one method pls
+    //ERROR! Interface can't be empty! At least one method
 };
 ```
 ```
-class StringReadable :public IReadable {...}; //read data from string\
+class StringReadable :public IReadable {...}; //read data from string
 class FileReadable :public IReadable {...}; //read data from file stream
 ```
 ```
@@ -381,9 +388,12 @@ no down casting
 ```
 
 ________
-Override\
-[override] keyword\
+Override
+```
+[override] keyword
+```
 override virtual method from base class
+same as C++, but...
 ```
 class A
 {
@@ -435,7 +445,7 @@ ________
 Literals
 ```
 [constexpr] keyword
-!! REMOVED !! replace by [literal] keyword
+!! REMOVED !! replaced by [literal] keyword
 ```
 ```
 [constinit] keyword
@@ -558,7 +568,7 @@ template< typename A , typename B > void some()
     { ... }
     literal if (class(B)) //check if type(B) is a class (not struct, not int, not bool, not interface)
     { ... }
-    literal if (interface(A))
+    literal if (interface(A)) //check if type(A) is an interface
     { ... }
     literal if (! return(A::size)) //check if function (A::size) return no value
     literal if (return(A::size) == void) //same
@@ -618,6 +628,10 @@ global scope
 template<typename T> void some( T xx , T yy )
 {
     std::vector< typedef(xx) > arr; //OK, use [typedef()] keyword in template parameters to deduce type
+
+    std::vector< typedef(xx::method) > vec; //OK, use [typedef()] keyword to detect return value from 'xx::method'
+
+    std::vector< typedef(&xx::method) > pointers; //OK, use [typedef()] keyword to declare pointer-to-member typename
 }
 ```
 ```
@@ -629,7 +643,6 @@ Auto
 ```
 [auto] keyword
 ```
-
 ```
 no auto as return value
 [auto function] with another [auto function] with another [auto function] with another [auto function]...horrible!!
@@ -660,7 +673,7 @@ typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal
 ```
 function(...) => ...; //ERROR! =>
 function(...) -> ...; //ERROR! ->
-All typedefs BEFORE function name
+All types BEFORE function name
 ```
 
 __________
@@ -746,7 +759,7 @@ NonDynamic obj; //OK, no dynamic
 NonDynamic* ptr = &obj; //?? what about pointers to static classes/structs/interfaces ??
 delete ptr; //ERROR! 'class NonDynamic' is a static; it can't be created dynamicly with 'operator new'
 ```
-static methods
+static methods\
 !! MINIMIZE STATIC METHODS AS POSIBLE !! DONT WRITE 'C'-PROCEDURE CODE !!
 ```
 class File
@@ -760,9 +773,9 @@ class File
 ```
 
 ____________
-Non-Copyable\
+Non-Copyable
 ```
-?? 'noncopyable' keyword ?? no, less keywords\
+?? 'noncopyable' keyword ?? no, less keywords
 use 'true' keyword instead
 ```
 prevent copy objects -- singleton only
@@ -796,6 +809,10 @@ void main()
     M obj; //OK
 
     M otherobj = obj; //ERROR! copy
+}
+M func()
+{
+    return( M() ); //ERROR! copy
 }
 ```
 
@@ -921,8 +938,8 @@ Volatile
 !! REMOVED !!
 ```
 
-___________________
-Template annoations
+____________________
+Template annotations
 ```
 template< typename T , class C , struct S , enum E , interface I >
 void some()
@@ -942,7 +959,7 @@ void some()
 template< typename T:std::vector >
 void some( const T& )
 {
-    //type T is any type, but contains 'std::vector'
+    //type T is any type, but same as 'std::vector'
 }
 void main()
 {
@@ -978,22 +995,26 @@ void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 
 ________________________
 Auto template parameters\
-no [auto] in return value, no [auto] in function parameters
+no [auto] in return value, no [auto] in function parameters\
+need to teach compiler detect parameters
 ```
-template< class A > struct Command
+template< class A >
+struct Command
 {
     readonly A& Action;
     Command( A& act ) :Action(act) {;}
     Command();
 };
-template< class T > void doit( Command<T>& cmd )
+template< class T >
+void doit( Command<T>& cmd )
 {
     cmd.Action.doit();
 }
 void other_doit( const Command<MyAction>& cmd )
 {
 }
-template< class T > void next_doit( Command<T>& cmd )
+template< class T >
+void next_doit( Command<T>& cmd )
 {
     doit( cmd );
 }
