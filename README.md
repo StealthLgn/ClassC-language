@@ -126,7 +126,8 @@ Data types
     [0.xxx, 1.xxx] with floating-point
 
 *  float32\
-    32 bit float
+    32 bit float\
+    //keyword [float] for back-campat with 'C'
 
 *  float64\
     64 bit float
@@ -635,6 +636,11 @@ now:
 int32 (*p)();
 typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal function without ->[&(*...)]<-
 ```
+```
+function(...) => ...; //ERROR! =>
+function(...) -> ...; //ERROR! ->
+All typedefs BEFORE function name
+```
 
 __________
 Namespaces
@@ -715,6 +721,7 @@ NonDynamic* obj = new (mem_placement) NonDynamic(); //ERROR! 'class NonDynamic' 
 NonDynamic obj; //OK, no dynamic
 
 NonDynamic* ptr = &obj; //?? what about pointers to static classes/structs/interfaces ??
+delete ptr; //ERROR! 'class NonDynamic' is a static; it can't be created dynamicly with 'operator new'
 ```
 static methods
 !! MINIMIZE STATIC METHODS AS POSIBLE !! DONT WRITE 'C'-PROCEDURE CODE !!
@@ -755,6 +762,9 @@ interface I true;
 class M :public X
 {
     M( const M& ); //ERROR! 'class M' is non-copyable because base 'class X'
+
+    M( X& other ); //OK, aggregation
+    X& m_aggr;
 };
 
 void main()
@@ -891,13 +901,13 @@ template< typename T , class C , struct S , enum E , interface I > void some()
 {
     //type T - any
 
-    //type C - classes only
+    //type C - any, but classes only
 
-    //type S - structures only
+    //type S - any, but structures only
 
-    //type E - enums only
+    //type E - any, but enums only
 
-    //type I - interfaces only
+    //type I - any, but interfaces only
 }
 ```
 ```
@@ -921,8 +931,53 @@ template< typename T:std::map > void some( const T& )
 }
 ```
 ```
-template< class A , interface B > literal bool some()
+template< class A , interface B > literal bool some()literal
 {
     return( B < A ); //check if interface 'B' is based type for class 'A'
 }
 ```
+```
+template< typename T > void some( mutable T& v ) //non-const, non-literal, non-readonly T&
+{
+}
+```
+
+________________________
+Auto template parameters\
+no [auto] in return value, no [auto] in function parameters
+```
+template< class A > struct Command
+{
+    readonly A& Action;
+    Command( A& act ) :Action(act) {;}
+    Command();
+};
+template< class T > void doit( Command<T>& cmd )
+{
+    cmd.Action.doit();
+}
+void other_doit( const Command<MyAction>& cmd )
+{
+}
+template< class T > void next_doit( Command<T>& cmd )
+{
+    doit( cmd );
+}
+void main()
+{
+    doit( Command<MyAction>( MyAction() ) ); //OK, 1) explicit type <MyAction>
+
+    doit( Command( MyAction() ) ); //OK, if no explicit type, try to check constructor; 2) found typename in constructor Command<MyAction>::Command( MyAction& )
+
+    other_doit( Command() ); //OK, if no constructor, try to check 'lvalue' in function parameter; 3) found const Command<MyAction>& in function other_doit;
+
+    next_doit( Command() ); //ERROR! 1) no explicit params, 2) no constructor type, 3) 'function next_doit' don't know about parameter T == couldn't decuce parameter 'A' for 'struct Command'
+}
+```
+
+______
+Lambda\
+no lambda functions/expressions\
+it's right-way to procedure code\
+lambda inside lambda inside lambda inside lambda...\
+this is a functional programming, not class-based
