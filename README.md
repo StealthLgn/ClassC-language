@@ -1,4 +1,4 @@
-C-like a general-purpose class-oriented coding language
+C-style a general-purpose class-oriented coding language
 
 //not programming language (programming == design, architecture)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
@@ -1258,5 +1258,25 @@ namespace std
     };
 
     static allocator& malloc; //global heap allocation
+}
+```
+__________
+While loop
+```
+[while] keyword
+```
+same as C, but...
+```
+void method()const
+{
+    while //OK, no condition and no brackets; same as 'while( true )'
+    {
+        ++infinite;
+    }
+
+    do
+    {
+    }
+    while(); //ERROR! with brackets req a condition
 }
 ```
