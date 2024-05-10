@@ -110,5 +110,85 @@ Data types
 
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
 
-*  void
+*  void\
     no data, used as return in functions
+
+__________
+Structures\
+[struct] keyword
+
+same a 'C/C++', but...
+
+*  inheritance\
+    only other struct can be a base class (no classes, no abstract, no interface...)\
+    struct is just simple data in memory, it's not an OBJECT
+
+*  no-virtual\
+    can't contains any virtual code:\
+    no virtual destructor //compiler error\
+    no virtual base class (like classes, interfaces)\
+    no virtual/pure virtual methods //compiler error
+
+*  immutability\
+    struct S const {...}; //[const] after struct name\
+    can be an immutability type
+
+____________
+Immutability
+[const] keyword
+
+All user-types (struct,class) is mutable by default\
+They can change state
+
+Immutability prevent this changes
+
+class MyClass const {...};\
+struct MyStruct const {...};
+
+Type is mutable in CONSTRUCTOR and DESTRUCTOR\
+Between them no one can change they state
+
+struct Minimal const { //const-type declaration\
+    unsigned int32 a,b; //can't be a const, becase need calc in constructor\
+    Minimal( unsigned int aa , unsigned int bb ) : a(aa) , b(bb) { //OK, initializator\
+        a = (a+b); //OK, mutation in constructor\
+    }\
+    unsigned int32 calculate()const {\
+        return( a < b ? a : b ); //read-only\
+    }\
+    Minimal update( unsigned int xx ) { //no const required\
+        return( Minimal( a+xx , b+xx ) ); //OK, create another copy\
+    }\
+};\
+void main() {\
+    Minimal min( 5 , 7 ); //OK, instance\
+    min.a = 10; //ERROR, Minimal is [const type], need to create a copy (another) object with different parameters\
+    Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters\
+}
+
+__________
+Interfaces\
+[interface] keyword
+
+interface IReadable {\
+
+    virtual unsigned int64 read( void* , unsigned int64 size ) =0; //can contains only pure virtual methods
+
+    //no constructors\
+    //IReadable() -- compile error
+    //IReadable( const IReadable& ) -- compile error
+    //IReadable( IReadable&& ) -- compile error
+    //IReadable( ... ) -- compile error
+    //template<> IReadable( ... ) -- compile error
+    //interface can't be created -- inheritance only
+    //the compiler does not generate a constructor (any one)
+
+    //no destructors\
+    //compile error
+    //interface can't be deleted
+    //any template T->~T() or call IReadable->~IReadable() -- compile error
+    //the compiler does not generate a destructor
+
+    //no copy assignment operator
+    //operator= -- compile error
+};
