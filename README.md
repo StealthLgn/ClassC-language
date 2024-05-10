@@ -432,7 +432,7 @@ but allowed in 'extern "C" {...}' for back-compat :(
 ```
 
 ________
-Literals\
+Literals
 ```
 [constexpr] keyword
 !! REMOVED !! replace by [literal] keyword
@@ -440,6 +440,7 @@ Literals\
 ```
 [constinit] keyword
 !! REMOVED !!
+make compiler more smarter with operators '<', '==', '!='...
 ```
 ```
 [consteval] keyword
@@ -447,7 +448,8 @@ Literals\
 ```
 [literal] it's a static const readonly compile-time data
 ```
-literal char Name[] = "My name";
+literal char Name[] = "My name"; //OK, fixed size const string
+literal char* OtherName = nullptr; //OK, null address
 ```
 ```
 void procedure( literal char* txt ); //literal only data in 'txt'
@@ -489,6 +491,13 @@ literal int32 calculate_bytes()literal //return literal int32 and use only liter
 literal int32 func() { //return literal-only in32 data
     return( 0 );
 }
+literal int32 func() {
+    int32 a = 32;
+    return( a ); //ERROR! 'a' is not a literal
+
+    literal int32 a = 32;
+    return( a ); //OK
+}
 ```
 ```
 literal if( func() == 0 ) {...} //compile-time if check; if condition is false -- all this statement will be ignored by compiler
@@ -512,9 +521,17 @@ void some( int32 aa ) {
     if ( aa < 10 ) { //OK, normal if
         //some stuff...
     }
+    else
+    {
+        //some non-literal stuff too...
+    }
 
     literal if( func() == 0 ) { //OK, another if; no mixing
         //some stuff...
+    }
+    else
+    {
+        //some literal stuff too...
     }
 }
 ```
@@ -534,6 +551,10 @@ template< typename A , typename B > void some()
     literal if (virtual(A::~A)) //check if virtual destructor of type(A) (no std::super_puper_is_virtual_destrucotr< auto(typename..) something-something >::value)
     { ... }
     literal if (return(A::empty) == bool) //check if function A::empty return 'bool' type
+    { ... }
+    literal if (return(const(A::size))) //check if function 'A::empty' return a const type
+    { ... }
+    literal if (literal(some)) //check if function 'some' is literal
     { ... }
     literal if (class(B)) //check if type(B) is a class (not struct, not int, not bool, not interface)
     { ... }
@@ -644,8 +665,9 @@ All typedefs BEFORE function name
 
 __________
 Namespaces
+```
 [namespace] keyword
-
+```
 ! great for code organization !
 
 ```
@@ -700,9 +722,10 @@ namespace my
 ```
 
 ______
-Static\
+Static
+```
 [static] keyword
-
+```
 static classes/structures/interfaces
 ```
 class NonDynamic static
@@ -738,10 +761,11 @@ class File
 
 ____________
 Non-Copyable\
-prevent copy objects -- singleton only
-
+```
 ?? 'noncopyable' keyword ?? no, less keywords\
 use 'true' keyword instead
+```
+prevent copy objects -- singleton only
 ```
 //class X is non-copyable now
 class X true
@@ -776,9 +800,10 @@ void main()
 ```
 
 ____
-THIS\
+THIS
+```
 [this] keyword
-
+```
 secondary constructors
 ```
 class My
@@ -833,18 +858,20 @@ void main()
 ```
 
 ______
-Thread\
+Thread
+```
 [thread] keyword
-
 dangerous keyword
+```
 ```
 thread(int32) PerThreadValue; //thread-local-storage variable
 ```
 
 ____
-Enum\
+Enum
+```
 [enum] keyword
-
+```
 ! great constant declaration !
 ```
 //some enum
@@ -897,7 +924,8 @@ Volatile\
 ___________________
 Template annoations\
 ```
-template< typename T , class C , struct S , enum E , interface I > void some()
+template< typename T , class C , struct S , enum E , interface I >
+void some()
 {
     //type T - any
 
@@ -911,7 +939,8 @@ template< typename T , class C , struct S , enum E , interface I > void some()
 }
 ```
 ```
-template< typename T:std::vector > void some( const T& )
+template< typename T:std::vector >
+void some( const T& )
 {
     //type T is any type, but contains 'std::vector'
 }
@@ -926,18 +955,23 @@ void main()
     std::map<char,void*> automap;
     some( automap ); //OK, call 'some< std::map >()' overloaded function
 }
-template< typename T:std::map > void some( const T& )
+template< typename T:std::map >
+void some( const T& )
 {
 }
 ```
+literal template functions
 ```
-template< class A , interface B > literal bool some()literal
+template< class A , interface B >
+literal bool some()literal
 {
     return( B < A ); //check if interface 'B' is based type for class 'A'
 }
 ```
+mutable template parameters
 ```
-template< typename T > void some( mutable T& v ) //non-const, non-literal, non-readonly T&
+template< typename T >
+void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 {
 }
 ```
@@ -978,6 +1012,7 @@ void main()
 ______
 Lambda\
 no lambda functions/expressions\
+no [lambda] keyword\
 it's right-way to procedure code\
 lambda inside lambda inside lambda inside lambda...\
 this is a functional programming, not class-based
