@@ -309,7 +309,6 @@ __________
 [mutable] keyword
 ```
 "C++": Field (attribute) of class can be changed in [const] method //bad name! method can't be a const, it's a something different
-but...
 ```
 class A
 {
@@ -333,7 +332,10 @@ class A
 [const_cast] keyword
 !! REMOVED !!
 ```
-
+```
+disable C-style cast ((type)(other))
+allowed only in extern "C" {...} section for back-compat with C
+```
 ____________________
 ## Read only attributes
 ```
