@@ -3,6 +3,11 @@ C-like a general-purpose class-oriented coding language
 //not programming language (programming == design, architecture)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
 
+__________
+Principles
+
+    1.Encapsulation
+
 ___________________________
 "Header" files, definitions
 
@@ -354,6 +359,12 @@ logfile\
 console/terminal\
 or something else to detect errors, but no 'goto'-style with jumps
 
+____
+goto\
+```
+[goto] keyword removed :)
+```
+
 ________
 Literals\
 ```
@@ -393,7 +404,7 @@ literal int32 calculate_bytes()literal //return literal int32 and use only liter
         return( Bits32 ); //ERROR! 'Bits32' is not a literal
     }
     else
-    literal if ( PlatformBits == 64 )
+    if ( PlatformBits == 64 ) //no 'literal' keyword required, because all statement is literal
     {
         return( 8 ); //OK, return literal 8
     }
@@ -401,6 +412,8 @@ literal int32 calculate_bytes()literal //return literal int32 and use only liter
     {
         static_assert; //stop compilation, if no valid statements
     }
+
+    //?? what about 'literal switch' ??
 }
 ```
 ```
@@ -435,4 +448,26 @@ void some( int32 aa ) {
         //some stuff...
     }
 }
+```
+
+________________
+Move constructor\
+
+```
+class A
+{
+    A( A&& other ); //!! move constructor is fantastic !!
+};
+```
+
+________
+Typedefs\
+```
+[typedef] keyword
+```
+same as 'C/C++', but...
+
+template<class T> using type = .... //!! STOP USING 'using' aliases !!
+```
+typedef 
 ```
