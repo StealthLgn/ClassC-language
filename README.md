@@ -148,23 +148,83 @@ struct MyStruct const {...};
 Type is mutable in CONSTRUCTOR and DESTRUCTOR\
 Between them no one can change they state
 
-struct Minimal const { //const-type declaration\
-    unsigned int32 a,b; //can't be a const, becase need calc in constructor\
-    Minimal( unsigned int aa , unsigned int bb ) : a(aa) , b(bb) { //OK, initializator\
-        a = (a+b); //OK, mutation in constructor\
-    }\
-    unsigned int32 calculate()const {\
-        return( a < b ? a : b ); //read-only\
-    }\
-    Minimal update( unsigned int xx ) { //no const required\
-        return( Minimal( a+xx , b+xx ) ); //OK, create another copy\
-    }\
-};\
-void main() {\
-    Minimal min( 5 , 7 ); //OK, instance\
-    min.a = 10; //ERROR, Minimal is [const type], need to create a copy (another) object with different parameters\
-    Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters\
+struct Minimal const { //const-type declaration
+
+    unsigned int32 a,b; //can't be a const, becase need calc in constructor
+    
+    Minimal( unsigned int32 aa , unsigned int32 bb ) : a(aa) , b(bb) { //OK, initializator
+        a = (a+b); //OK, mutation in constructor
+    }
+    
+    unsigned int32 calculate()const {
+        return( a < b ? a : b ); //read-only
+    }
+    
+    Minimal update( unsigned int32 xx ) { //no const required
+        return( Minimal( a+xx , b+xx ) ); //OK, create another copy
+    }
+
+    void set( unsigned int32 aa ) {
+        a = aa; //ERROR! Minimal is a const (immutable) type, can't be changed
+    }
+};
+
+void main() {
+
+    Minimal min( 5 , 7 ); //OK, instance
+    
+    min.a = 10; //ERROR, Minimal is [const type], need to create a copy (another) object with different parameters
+    
+    Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters
 }
+
+__________
+Mutability\
+[mutable] keyword
+"C++": Field (attribute) of class can be changed in [const] method //bad name! method can't be a const, it's a something different
+but...
+
+class A {
+
+    mutable int32 m_value;
+
+    void update()const {
+        ++m_value; //ERROR! const method, m_value can't be changed! If method 'const' -- it's CONST
+    }
+
+    void check()const mutable {
+        ++m_value; //OK, mutable method allow to change mutable attribute
+    }
+
+    bool valid()const {
+        check(); //OK, can call const method
+        return( m_value == 0 );
+    }
+};
+
+[const_cast] keyword
+!! REMOVED !!
+
+____________________
+Read only attributes\
+[readonly] keyword
+Allow to read fields from class/struct
+
+class Point2D {
+public:
+    readonly int32 posx,posy; //private attributes, but opened for read-only outside
+
+    void move( int32 xx , int32 yy );
+};
+void main() {
+    Point2D coords( 10 , 20 );
+    std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory
+    coords.posx = 11; //ERROR! read-only!
+    coords.move( 11 , 21 ); //OK, public method; point will move itself
+}
+class Point3D :public Point2D {
+public:
+};
 
 __________
 Interfaces\
@@ -174,7 +234,7 @@ interface IReadable {\
 
     virtual unsigned int64 read( void* , unsigned int64 size ) =0; //can contains only pure virtual methods
 
-    //no constructors\
+    //no constructors
     //IReadable() -- compile error
     //IReadable( const IReadable& ) -- compile error
     //IReadable( IReadable&& ) -- compile error
@@ -183,12 +243,44 @@ interface IReadable {\
     //interface can't be created -- inheritance only
     //the compiler does not generate a constructor (any one)
 
-    //no destructors\
+    //no destructor
     //compile error
     //interface can't be deleted
     //any template T->~T() or call IReadable->~IReadable() -- compile error
     //the compiler does not generate a destructor
 
     //no copy assignment operator
-    //operator= -- compile error
+    //operator=
+    //compile error
+
+    bool is_ok()const; //OK, no 'virtual' required, it's pure virtual by default (because INTERFACE)
+
+    virtual unsigned int64 peek( void* , unsigned int64 size ); //no '=0' required, it's pure virtual by default (because INTERFACE)
+};
+
+class StringReadable :public IReadable {...}; //read data from string\
+class FileReadable :public IReadable {...}; //read data from file stream
+
+new IReadable //ERROR, interface can't be instantiated (even if it's an empty, without methods)
+
+delete IReadable //ERROR, interface can't be deleted
+
+class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
+
+void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
+
+________
+Override\
+[override] keyword\
+override virtual method from base class
+
+class A {\
+    virtual void dump( ostream& )const;\
+};\
+class B :public A {\
+
+    override void dump( ostream& )const; //override at beginning, instead of virtual
+
+    override dump( ostream& )const; //OK, no return value required, becase base class
+
 };
