@@ -7,6 +7,18 @@ __________
 Principles
 
     1.Encapsulation
+    //prevent change state outside of object
+    //only object knows how it's changed
+    //the object must have an idea and purpose
+    
+    2.Composition
+    //~40% of code should be a constructors
+
+!! STOP FLEXIBILITY !!
+INFLEXIBLE LANGUAGE
+```
+flexibility does not equal opportunity
+```
 
 ___________________________
 "Header" files, definitions
@@ -461,7 +473,7 @@ class A
 ```
 
 ________
-Typedefs\
+Typedefs
 ```
 [typedef] keyword
 ```
@@ -469,5 +481,55 @@ same as 'C/C++', but...
 
 template<class T> using type = .... //!! STOP USING 'using' aliases !!
 ```
-typedef 
+typedef unsigned int32  size_type;
+typedef template<typename T> MyTemplate<T,size_type>  MySizeTemplate;
+MySizeTemplate<bool> // MyTemplate< bool , size_type >
+```
+```
+global scope
+{
+    namespace scope
+    {
+        typedef ...; //only visible in this namespace scope
+
+        class scope
+        {
+            typedef ...; //only visible in class scope
+
+            function scope
+            {
+                typedef ...; //only visible in function scope
+
+                statemenet scope
+                {
+                    typedef ...; //only visible in statemenet scope
+                }
+            }
+        }
+    }
+}
+```
+____
+Auto
+```
+[auto] keyword
+```
+
+```
+no auto as return value
+[auto function] with another [auto function] with another [auto function] with another [auto function]...horrible!!
+```
+```
+no auto in function parameters
+it's completely broke an idea of templates
+```
+
+but...
+```
+template<class T>
+bool func( const T& container )
+{
+    auto count = some_count(); //but inside a function it's good!
+    auto iter = container.cbegin(); //no horrible 'typedef typename T::iterator  iterator' or something like this
+}
 ```
