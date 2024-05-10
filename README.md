@@ -24,7 +24,7 @@ more 'discipline code'
 ```
 
 _____________________________
-The One Definition Rule (ODR)\
+The One Definition Rule (ODR)
 ```
 "cannot have more than one definition by translation unit"
 enum
@@ -117,49 +117,65 @@ only 1(true) or 0(false) -- only one bit used
 32 bit integer, force signed
 [−2147483647, +2147483647]
 ```
-*  unsigned int32\
-    32 bit integer, force unsigned\
-    [0, 4294967295]
-
-*  int64\
-    64 bit integer\
-    //keyword [long long] for back-campat with 'C'\
-    [−9223372036854775807, +9223372036854775807]
-  
-*  signed int64\
-    64 bit integer, force signed\
-    [−9223372036854775807, +9223372036854775807]
-  
-*  unsigned int64\
-    64 bit integer, force unsigned\
-    [0, 18446744073709551615] 
-
-//in future int128...maybe...
-
-*  float16\
-    16 bit float\
-    [0.xxx, 1.xxx] with floating-point
-
-*  float32\
-    32 bit float\
-    //keyword [float] for back-campat with 'C'
-
-*  float64\
-    64 bit float
-
-*  double32\
-    32 bit double floating-point
-
-*  double64\
-    64 bit double floating-point
-
-*  double128\
-    //keyword [long double] for back-campat with 'C'
-
+*  unsigned int32
+```
+32 bit integer, force unsigned
+[0, 4294967295]
+```
+*  int64
+```
+64 bit integer
+[−9223372036854775807, +9223372036854775807]
+//keyword [long long] for back-campat with 'C'
+```
+*  signed int64
+```
+64 bit integer, force signed
+[−9223372036854775807, +9223372036854775807]
+```
+*  unsigned int64
+```
+64 bit integer, force unsigned
+[0, 18446744073709551615]
+```
+*  float16
+```
+16 bit float
+[0.xxx, 1.xxx] floating-point
+```
+*  float32
+```
+32 bit float
+//keyword [float] for back-campat with 'C'
+```
+*  float64
+```
+64 bit float
+```
+*  double32
+```
+32 bit double floating-point
+```
+*  double64
+```
+64 bit double floating-point
+```
+*  double128
+```
+128 bit double floating-point
+keyword [long double] for back-campat with 'C'
+```
+*  void
+```
+no data, used as return in functions
+```
+```
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
-
-*  void\
-    no data, used as return in functions
+//!! this keywords for backward compatibility with 'C' libraries and API !!
+```
+```
+//in future int128...maybe...
+```
 
 __________
 Structures
@@ -216,7 +232,7 @@ Immutability
 [const] keyword
 ```
 
-All user-types (struct,class) is mutable by default\
+All user-types (struct,class) are mutable by default\
 They can change state
 
 Immutability prevent this changes
@@ -224,8 +240,8 @@ Immutability prevent this changes
 class MyClass const {...};
 struct MyStruct const {...};
 ```
-Type is mutable in CONSTRUCTOR and DESTRUCTOR\
-Between them no one can change they state
+Type is still mutable in CONSTRUCTOR and DESTRUCTOR\
+Between them no one can change they state (@see UNION section)
 ```
 struct Minimal const { //const-type declaration
 
@@ -251,7 +267,7 @@ void main() {
 
     Minimal min( 5 , 7 ); //OK, instance
     
-    min.a = 10; //ERROR, Minimal is [const type], need to create a copy (another) object with different parameters
+    min.a = 10; //ERROR! Minimal is [const type], need to create a copy/another object with different parameters
     
     Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters
 }
@@ -294,7 +310,7 @@ Read only attributes
 [readonly] keyword
 ```
 !! STOP USING getters/accessors !!\
-!! STOP calling(naming) method as get*... !!
+!! STOP calling(naming) methods as get*... !!
 
 ```
 class Point2D
@@ -318,7 +334,7 @@ class Point3D :public Point2D
 
     void move( int32 xx , int32 yy , int32 zz )
     {
-        posx = 10; //ERROR! 'posx' is private for modification
+        posx = 10; //ERROR! 'posx' is a private
 
         Point2D::move( xx , yy ); //OK, public method
 
@@ -351,13 +367,12 @@ interface IReadable {
     //any template T->~T() or call IReadable->~IReadable() -- compile error
     //the compiler does not generate a destructor
 
-    //no copy assignment operator
-    //operator=
+    //no copy assignment operator=
     //the compiler does not generate a copy assignment operator
 
     bool is_ok()const; //OK, no 'virtual' required, it's pure virtual by default (because INTERFACE)
 
-    virtual unsigned int64 peek( void* , unsigned int64 size ); //no '=0' required, it's pure virtual by default (because INTERFACE)
+    virtual unsigned int64 peek( void* , unsigned int64 size ); //OK, no '=0' required, it's pure virtual by default (because INTERFACE)
 };
 ```
 ```
@@ -371,8 +386,8 @@ class StringReadable :public IReadable {...}; //read data from string
 class FileReadable :public IReadable {...}; //read data from file stream
 ```
 ```
-new IReadable; //ERROR, interface can't be instantiated (even if it's an empty, without methods)
-delete IReadable; //ERROR, interface can't be deleted
+new IReadable; //ERROR! interface can't be instantiated (even if it's an empty, without methods)
+delete IReadable; //ERROR! interface can't be deleted
 ```
 ```
 delete static_cast< FileReadable* >( &IReadable ); //ERROR! interface can't be cast to derived class
@@ -390,7 +405,7 @@ delete EmptyReadable; //OK, delete class
 static_cast< IReadable& >( EmptyReadable ); //OK, can cast derived 'class EmptyReadable' to base 'interface IReadable'
 ```
 ```
-class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
+class FileStream :public IReadable, public IWritable {...}; //OK, multi inheritance
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
 copy( FileStream() , MemoryStream() ); //OK, create temp objects (no 'const&' required)
 ```
@@ -417,7 +432,9 @@ class A
 class B :public A
 {
     override void dump( ostream& )const; //override at beginning, instead of virtual
-
+};
+class C :public B
+{
     override dump( ostream& )const; //OK, no return value required, because base class
 };
 ```
@@ -677,11 +694,11 @@ bool func( const T& container )
 }
 ```
 ```
-//C++
+//C++:
 auto (*p)() -> int; // declares p as pointer to function returning int
 auto (*q)() -> auto = p; // declares q as pointer to function returning T, where T is deduced from the type of p
 
-now:
+//now:
 int32 (*p)();
 typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal function without ->[&(*...)]<-
 ```
@@ -727,6 +744,7 @@ namespace my
     private:
 
         template< typename A , typename B> void some(); //internal use only, only types in 'my' namespace can use this functions
+        //any 'using namespace my' do not inject this function to your scope -- only public
 
     public: namespace foo //namespace always public, can't hide namespaces
     {
@@ -761,6 +779,8 @@ class NonDynamic static
     //prevent to create object dynamicly (operator new)
 
     //can't containt 'operator new/delete'
+    void* operator new( memory_size ); //ERROR! static class
+    void operator delete( void* ); //ERROR! 'delete' req 'operator new', but 'new' is not allowed because 'static class'
 
     //all derived types is static too
 };
@@ -790,7 +810,7 @@ class File
 ____________
 Non-Copyable
 ```
-?? 'noncopyable' keyword ?? no, less keywords
+?? 'noncopyable' keyword ?? less keywords
 use 'true' keyword instead
 ```
 prevent copy objects -- singleton only
@@ -845,7 +865,7 @@ class A
     {
         this.Username; //OK, no -> pointers
 
-        this->Username; //ERROR! this is not a pointer;
+        this->Username; //ERROR! 'this' is not a pointer;
 
         //prevent 'delete this'
     }
@@ -906,7 +926,7 @@ void main()
 
     cout << true; //OK, Output::operator<< (bool), return Output&
 
-    cout << 5; //OK, Output::operator<< (int32), return MyOutput& because return this, but this is a 'class MyOutput'
+    cout << 5; //OK, Output::operator<< (int32), return MyOutput& because return 'this', but this is a 'class MyOutput'
     //equivalent to (static_cast<MyOutput&>( Output::operator<<( int32(5) ) ))
     //operator<<(int) called from cout, which 'class MyOutput' so 'this&' is a 'MyOutput&'
 
@@ -1106,9 +1126,47 @@ _____________
 VOID pointers\
 Pandora's Box in class-based coding
 ```
-libc use void*
+libc/unix use void*
 winapi use void*
 other c-libs use void* (script lua)
+```
+?? how to protect object memory (const/readonly/static) from [void*] abueses ??\
+and we can't break 'C' compatibility :(
+
+______
+Friend
+```
+[friend] keyword
+!! MINIMIZE FRIENDS AS POSIBLE !!
+```
+problem:
+```
+class A
+{
+    friend class B; //now all stuff from 'class A' opened for 'class B', but need only one method for 'class B'
+};
+class B;
+```
+solution:
+```
+class A
+{
+    friend(class B) inline void friend_method()const mutable; //only this method is 'friend' for 'class B'
+};
+```
+literal expressions
+```
+void some()
+{
+    literal if (friend(A)) //ERROR! 'friend' check is not allowed; this is private :)
+}
+```
+
+__________
+Reflection
+```
+!! completely breaks encapsulation !!
+!! NO REFLECTION !!
 ```
 
 _____
@@ -1179,17 +1237,24 @@ std::allocator
 ```
 namespace std
 {
-    typedef stream_size  memory_size;
+    typedef unsigned int32  streamsize; //for x32, yes 'unsigned'
+    typedef unsigned int64  streamsize; //for x64
+
+    typedef streamsize  memorysize;
 
     interface allocator
     {
-        virtual void* allocate( memory_size ) =0;
+        //allocate memory block
+        virtual void* allocate( memorysize ) =0;
 
-        virtual bool deallocate( void* , memory_size ) =0;
+        //free memory block
+        virtual bool deallocate( void* , memorysize ) =0;
 
-        virtual void* reallocate( void* , memory_size ) =0;
+        //reallocate memory block from 'allocate' method
+        virtual void* reallocate( void* , memorysize ) =0;
 
-        virtual memory_size size( const void* )const =0;
+        //try to calculate size of block
+        virtual memorysize size( const void* )const =0;
     };
 
     static allocator& malloc; //global heap allocation
