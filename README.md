@@ -1293,9 +1293,20 @@ _______
 ```
 same as 'C', but...
 ```
-struct sizeof(MyStruct,32) //'struct MyStruct'
+struct sizeof(MyStruct,32) //'struct MyStruct' should be a 32 bytes; if less/greather -- compiler error
 {
 };
+```
+```
+enum sizeof(MyEnum); //ERROR! not allowed
+
+interface sizeof(MyInterface); //ERROR! not allowed
+```
+```
+void main()
+{
+    const std::memorysize total = sizeof(MyStruct); //should be 32 bytes
+}
 ```
 
 ________
@@ -1304,6 +1315,21 @@ ________
 [alignof] keyword
 ```
 same as 'C++', but...
+```
+struct alignof(MyStruct,4) //'struct MyStruct' aligned by 4 bytes
+{
+};
+```
+```
+enum alignof(MyEnum); //ERROR! not allowed
+
+interface alignof(MyInterface); //ERROR! not allowed
+```
+void main()
+{
+    const std::memorysize total = alignof(MyStruct); //should be 4 bytes
+}
+```
 
 _____________________
 ## Functions annotations
