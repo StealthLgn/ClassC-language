@@ -1331,13 +1331,13 @@ void main()
 }
 ```
 
-_____________________
+___
 ## Functions annotations
 ```
 [[nodiscard]] [[deprecated]] and other else is UGLY!
 ```
 
-_____________________
+___
 ## Remove other keywords
 ```
 alignas
