@@ -904,7 +904,7 @@ void foo( FileMode n )
 ```
 
 _____
-Final\
+Final
 ```
 [final] keyword
 !! REMOVED !!
@@ -915,14 +915,14 @@ This keyword is broke our idea
 ```
 
 ________
-Volatile\
+Volatile
 ```
 [volatile] keyword
 !! REMOVED !!
 ```
 
 ___________________
-Template annoations\
+Template annoations
 ```
 template< typename T , class C , struct S , enum E , interface I >
 void some()
