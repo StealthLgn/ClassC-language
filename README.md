@@ -1280,3 +1280,9 @@ void method()const
     while(); //ERROR! with brackets req a condition
 }
 ```
+
+_____________________
+Functions annotations
+```
+[[nodiscard]] [[deprecated]] and other else is UGLY!
+```
