@@ -228,7 +228,7 @@ ____________________
 Read only attributes\
 [readonly] keyword
 
-!! STOP USING getters/accessors !!
+!! STOP USING getters/accessors !!\
 !! STOP calling method as get*... !!
 
 ```
@@ -341,7 +341,7 @@ class B :public A {
 
     override void dump( ostream& )const; //override at beginning, instead of virtual
 
-    override dump( ostream& )const; //OK, no return value required, becase base class
+    override dump( ostream& )const; //OK, no return value required, because base class
 
 };
 ```
