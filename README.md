@@ -21,6 +21,45 @@ flexibility does not equal opportunity
 ```
 more 'discipline code'
 ```
+____
+## Encapsulation
+hold data/state and behavior together inside an object
+```
+class X
+{
+    public:
+
+        void set_data( int32 i )
+        {
+            m_encapsulation = i; //!! encapsulation is over now !!
+        }
+
+    private:
+        int32 m_encapsulation;
+};
+//same
+void main()
+{
+    X xx;
+    xx.m_encapsulation = 10; //or 'set_data' it doesn't matter
+}
+```
+each 'set_data', 'set_name', 'set_*' broke encapsulation\
+this is not an object - it's a data structure\
+if object have no-state, he don't need encapsulation -- only state+behavior require encapsulation
+```
+std::vector, std::map, std::list - this is all data 'struct', it's not an objects; they are not independent
+
+class Widget
+{
+    virtual void draw( Context& ); //check visibility, prepare state and draw: only widget itself knows how to draw -- no external control is needed
+
+    virtual void move( const Point2D& ); //check point, check state (is movable), check clamp to screen and then move
+
+    virtual void show( bool ); //check state, check already shown and then toggle visibility + maybe other staff
+};
+thats object!
+```
 _____________________________
 ## The One Definition Rule (ODR)
 ```
@@ -374,7 +413,6 @@ class Point3D :public Point2D
     }
 };
 ```
-
 __________
 ## Interfaces
 ```
@@ -418,8 +456,8 @@ class StringReadable :public IReadable {...}; //read data from string
 class FileReadable :public IReadable {...}; //read data from file stream
 ```
 ```
-new IReadable; //ERROR! interface can't be instantiated (even if it's an empty, without methods)
-delete IReadable; //ERROR! interface can't be deleted
+IReadable* ptr = new IReadable(); //ERROR! interface can't be instantiated (even if it's an empty, without methods)
+delete ptr; //ERROR! interface can't be deleted
 ```
 ```
 delete static_cast< FileReadable* >( &IReadable ); //ERROR! interface can't be cast to derived class
@@ -431,7 +469,8 @@ class EmptyReadable :public IReadable
 
     //no virtual ~EmptyReadable destructor required, but allowed
 };
-delete EmptyReadable; //OK, delete class
+EmptyReadable* someptr;
+delete someptr; //OK, delete class
 ```
 ```
 static_cast< IReadable& >( EmptyReadable ); //OK, can cast derived 'class EmptyReadable' to base 'interface IReadable'
@@ -448,7 +487,6 @@ dynamic_cast searching a dervied class...
 how ?? by vtable ?? dont touch vtable !!
 no down casting
 ```
-
 ________
 ## Override
 ```
@@ -487,14 +525,12 @@ __________
 ```
 [noexcept] keyword removed
 ```
-
 std::cout\
 assert\
 message box\
 logfile\
 console/terminal\
 or something else to detect errors, but no 'goto'-style with jumps
-
 ____
 ## goto
 ```
@@ -503,21 +539,21 @@ ____
 ```
 but allowed in 'extern "C" {...}' for back-compat :(
 ```
-
 ________
 ## Literals
 ```
 [constexpr] keyword
-!! REMOVED !! replaced by [literal] keyword
+!! REMOVED !!
+replaced by [literal] keyword
 ```
 ```
 [constinit] keyword
 !! REMOVED !!
-make compiler more smarter with operators '<', '==', '!='...
 ```
 ```
 [consteval] keyword
 !! REMOVED !!
+make compiler more smarter with operators '<', '==', '!='...
 ```
 [literal] it's a static const readonly compile-time data
 ```
