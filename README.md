@@ -141,13 +141,13 @@ All user-types (struct,class) is mutable by default\
 They can change state
 
 Immutability prevent this changes
-
-class MyClass const {...};\
+```
+class MyClass const {...};
 struct MyStruct const {...};
-
+```
 Type is mutable in CONSTRUCTOR and DESTRUCTOR\
 Between them no one can change they state
-
+```
 struct Minimal const { //const-type declaration
 
     unsigned int32 a,b; //can't be a const, becase need calc in constructor
@@ -168,7 +168,6 @@ struct Minimal const { //const-type declaration
         a = aa; //ERROR! Minimal is a const (immutable) type, can't be changed
     }
 };
-
 void main() {
 
     Minimal min( 5 , 7 ); //OK, instance
@@ -177,6 +176,7 @@ void main() {
     
     Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters
 }
+```
 
 __________
 Mutability\
