@@ -311,6 +311,7 @@ Exceptions\
 ```
 [nothrow] keyword removed
 ```
+```
 [noexcept] keyword removed
 ```
 
