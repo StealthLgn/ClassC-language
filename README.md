@@ -606,6 +606,25 @@ namespace my
 
     private:
 
-        template
+        template< typename A , typename B> void some(); //internal use only, only types in 'my' namespace can use this functions
+
+    public: namespace foo //namespace always public, can't hide namespaces
+    {
+        class Other
+        {
+            Other()
+            {
+                my::access_mode; //OK, public access
+
+                my::some(); //ERROR, function 'some' is private
+
+                my::Range; //OK, 'class Range' is protected and 'class Other' inside namespace my
+            }
+        };
+    }
+
+    protected:
+
+        class Range {...}; //class 'Range' by any type declared inside 'my' namespace or sub-namespaces
 }
 ```
