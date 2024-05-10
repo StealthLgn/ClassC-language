@@ -60,13 +60,25 @@ _____
 ____
 ## Preprocessor
 ```
-__CLASSC_VERSION__ //language version by compiler
+__CLASSC_VERSION__ //language version by compiler; 2022, 2025, 2030 (no bit mask)
 ```
 ```
 __FILE__ //at least filename (module name); very important for testing/debugging/error handling
 ```
 ```
 __LINE__ //line number; very important for testing/debugging/error handling
+```
+```
+#define true  false //ERROR! no language 'keywords' in define
+```
+```
+#include once //include this file only once in translation unit
+#include <memory> //only <> breckets
+#include "file.ch" //ERROR! use <file.ch> instead
+```
+```
+#pragma //some compiler extensions
+__CLASSC_NOEXTENSIONS__ //if extensions are disabled by compiler
 ```
 __________
 ## Data types
@@ -798,7 +810,12 @@ void main()
     SomeCC::doit(); //call 'AA::BB::CC::doit()' function
 }
 ```
-
+```
+inline namespaces
+namespace //no name
+{
+}
+```
 ______
 ## Static
 ```
@@ -1315,7 +1332,6 @@ void method()const
     while(); //ERROR! with brackets req a condition
 }
 ```
-
 _______
 ## Size OF
 ```
@@ -1338,10 +1354,9 @@ interface sizeof(MyInterface); //ERROR! not allowed
 ```
 void main()
 {
-    const std::memorysize total = sizeof(MyStruct); //should be 32 bytes
+    const std::memorysize total = sizeof(MyStruct); //should be 32 bytes; return literal unsigned int32
 }
 ```
-
 ________
 ## Align OF
 ```
@@ -1364,10 +1379,34 @@ interface alignof(MyInterface); //ERROR! not allowed
 ```
 void main()
 {
-    const std::memorysize total = alignof(MyStruct); //should be 4 bytes
+    const std::memorysize total = alignof(MyStruct); //should be 4 bytes; return literal unsigned int32
 }
 ```
+___
+## Static arrays
+```
+int32 numbers[] = { 1,2,3 };
+```
+same as C++, but...
+```
+void some( int32 limit )
+{
+    int32 numbers[limit] = {0}; //allow to create static arrays from variable like C; !! ONLY IN FUNCTIONS/METHODS !!
+}
+struct Data
+{
+    int32 Max;
+    char Value[Max]; //ERROR! fixed literal size only
 
+    char Other[sizeof(int32)]; //OK
+};
+std::memorysize calc( int32 limit )
+{
+    char text[limit] = {0};
+    limit = 0;
+    return( sizeof(text) );
+}
+```
 _______
 ## Return
 ```
@@ -1422,11 +1461,24 @@ else literal if (sizeof(return(Class::method)) == 4)
 }
 ```
 ___
+## Operator delete
+```
+Class* p;
+delete p; //call destructor ~Class(), and free memory
+
+but now...
+//0) ?? what about (p != nullptr) ?? auto check
+//1) check type (no interfaces)
+//2) call destructor ~Class();
+//3) free memory
+//4) write 'nullptr' to 'p' (p == nullptr after delete); memory is lost now, no address
+```
+___
 ## Functions annotations/attributes
 ```
-[[nodiscard]] [[deprecated]] [[noreturn]] and other else is UGLY!
+[[nodiscard]] [[deprecated]] [[noreturn]] [[maybe_unused]] and other else is UGLY!
+!! no attrubutes/annotations !!
 ```
-
 ___
 ## Remove other keywords
 ```
