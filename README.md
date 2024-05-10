@@ -202,28 +202,36 @@ class A {
     }
 };
 
-[const_cast] keyword
+[const_cast] keyword\
 !! REMOVED !!
 
 ____________________
 Read only attributes\
 [readonly] keyword
-Allow to read fields from class/struct
 
-class Point2D {
+!! STOP USING getters !!
+
+class Point2D {\
 public:
+
     readonly int32 posx,posy; //private attributes, but opened for read-only outside
-
     void move( int32 xx , int32 yy );
-};
-void main() {
-    Point2D coords( 10 , 20 );
-    std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory
-    coords.posx = 11; //ERROR! read-only!
-    coords.move( 11 , 21 ); //OK, public method; point will move itself
-}
-class Point3D :public Point2D {
+};\
+void main() {\
+    Point2D coords( 10 , 20 );\
+    std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory\
+    coords.posx = 11; //ERROR! read-only!\
+    coords.move( 11 , 21 ); //OK, public method; point will move itself\
+}\
+class Point3D :public Point2D {\
 public:
+
+    readonly int32 posz;
+    void move( int32 xx , int32 yy , int32 zz ) {
+        posx = 10; //ERROR! 'posx' is private for modification
+        Point2D::move( xx , yy ); //OK, public method
+        posz = zz;
+    }
 };
 
 __________
@@ -269,6 +277,9 @@ class FileStream :public IReadable, public IWritable {...}; //multi inheritance 
 
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
 
+[dynamic_cast] keyword\
+!! REMOVED !!
+
 ________
 Override\
 [override] keyword\
@@ -284,3 +295,84 @@ class B :public A {\
     override dump( ostream& )const; //OK, no return value required, becase base class
 
 };
+
+__________
+Exceptions\
+!! REMOVED !!
+```
+[try] keyword removed
+```
+```
+[catch] keyword removed
+```
+```
+[throw] keyword removed
+```
+```
+[nothrow] keyword removed
+```
+[noexcept] keyword removed
+```
+
+std::cout\
+assert\
+message box\
+logfile\
+console/terminal\
+or something else to detect errors, but no 'goto'-style with jumps
+
+________
+Literals\
+
+[constexpr] keyword\
+!! REMOVED !! replace by [literal] keyword
+
+[constinit] keyword\
+!! REMOVED !!
+
+[consteval] keyword\
+!! REMOVED !!
+
+[literal] it's a static const readonly compile-time data
+```
+literal char Name[] = "My name";
+```
+```
+void procedure( literal char* txt ); //literal only data in 'txt'
+```
+```
+void func()literal; //literal only expressions in functions; prevent to use #define MACRO
+```
+```
+literal int32 func() { //return literal-only in32 data
+    return( 0 );
+}
+```
+```
+literal if( func() == 0 ) {...} //compile-time if check; if condition is false -- all this statement will be ignored by compiler
+```
+'literal if' CAN'T be mixed with normal(?) runtime 'if'\
+example:
+```
+void some( int32 aa ) {
+    if ( aa < 10 ) {
+        //some stuff...
+    }
+    else
+    literal if ( func() == aa ) { //ERROR! literal if combined with non-literal if
+        //some stuff...
+    }
+}
+```
+solution:
+```
+void some( int32 aa ) {
+    if ( aa < 10 ) { //OK, normal if
+        //some stuff...
+    }
+
+    literal if( func() == 0 ) { //OK, another if; no mixing
+        //some stuff...
+    }
+}
+```
