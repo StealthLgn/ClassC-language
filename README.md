@@ -147,23 +147,48 @@ Data types
 
 __________
 Structures\
-[struct] keyword
-
+[struct] keyword\
 same a 'C/C++', but...
 
-*  inheritance\
-    only other struct can be a base class (no classes, no abstract, no interface...)\
-    struct is just simple data in memory, it's not an OBJECT
+*  inheritance
+```
+only other struct can be a base class (no classes, no abstract, no interface...)
+struct is just simple data in memory, it's not an OBJECT
+```
+*  no-virtual
+```
+can't contains any virtual code:
+no virtual destructor //compiler error
+no virtual base class (like classes, interfaces)
+no virtual/pure virtual methods //compiler error
+```
+*  immutability
+```
+struct S const {...}; //[const] after struct name
+can be an immutability type
+```
 
-*  no-virtual\
-    can't contains any virtual code:\
-    no virtual destructor //compiler error\
-    no virtual base class (like classes, interfaces)\
-    no virtual/pure virtual methods //compiler error
+_______
+Classes\
+[class] keyword\
+same a 'C/C++', but...
 
-*  immutability\
-    struct S const {...}; //[const] after struct name\
-    can be an immutability type
+*  inheritance
+```
+only [classes] or [interfaces] can be a base types for classes
+no struct are allowed
+```
+*  immutability
+```
+class C const {...}; //[const] after class name
+can be an immutability type
+```
+*  virtual
+```
+allow to use virtual base classes
+allow to use virtual methods, pure virtual methods
+allow to use virtual destructors
+```
 
 ____________
 Immutability
@@ -698,7 +723,7 @@ class File
 {
     static void read( File& f ); //ERROR! can't use class type as parameter inside this class
 
-    void read( File& f ); //ERROR! same
+    void read( File& f ); //OK, operator=, swap(), merge()
 
     void read(); //OK
 };
@@ -765,6 +790,7 @@ class My
     }
 };
 ```
+
 'this&' as return value
 ```
 class Output
@@ -805,7 +831,7 @@ dangerous keyword
 thread(int32) PerThreadValue; //thread-local-storage variable
 ```
 
-_____
+____
 Enum\
 [enum] keyword
 
@@ -837,5 +863,66 @@ void foo( FileMode n )
     n = enum<FileMode>( othername.c_str() , FileMode::Undefined ); //OK, try to cast string 'othername' to 'enum FileMode'; if not found -- use Undefined as default
 
     //allow to use 'FileMode::Undefined' with scope '::'
+}
+```
+
+_____
+Final\
+```
+[final] keyword
+!! REMOVED !!
+```
+```
+Class-oriented language: we need to extends functionality of each class
+This keyword is broke our idea
+```
+
+________
+Volatile\
+```
+[volatile] keyword
+!! REMOVED !!
+```
+
+___________________
+Template annoations\
+```
+template< typename T , class C , struct S , enum E , interface I > void some()
+{
+    //type T - any
+
+    //type C - classes only
+
+    //type S - structures only
+
+    //type E - enums only
+
+    //type I - interfaces only
+}
+```
+```
+template< typename T:std::vector > void some( const T& )
+{
+    //type T is any type, but contains 'std::vector'
+}
+void main()
+{
+    std::vector<int32> arr;
+    some( arr ); //OK, 'arr' is a vector type, call 'some< std::vector >()' overloaded function
+
+    std::list<float64> ls;
+    some( ls ); //ERROR! only 'std::vector' or 'std::map' based types
+
+    std::map<char,void*> automap;
+    some( automap ); //OK, call 'some< std::map >()' overloaded function
+}
+template< typename T:std::map > void some( const T& )
+{
+}
+```
+```
+template< class A , interface B > literal bool some()
+{
+    return( B < A ); //check if interface 'B' is based type for class 'A'
 }
 ```
