@@ -210,22 +210,20 @@ Read only attributes\
 [readonly] keyword
 
 !! STOP USING getters !!
-
-class Point2D {\
+```
+class Point2D {
 public:
-
     readonly int32 posx,posy; //private attributes, but opened for read-only outside
     void move( int32 xx , int32 yy );
-};\
-void main() {\
-    Point2D coords( 10 , 20 );\
-    std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory\
-    coords.posx = 11; //ERROR! read-only!\
-    coords.move( 11 , 21 ); //OK, public method; point will move itself\
-}\
-class Point3D :public Point2D {\
+};
+void main() {
+    Point2D coords( 10 , 20 );
+    std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory
+    coords.posx = 11; //ERROR! read-only!
+    coords.move( 11 , 21 ); //OK, public method; point will move itself
+}
+class Point3D :public Point2D {
 public:
-
     readonly int32 posz;
     void move( int32 xx , int32 yy , int32 zz ) {
         posx = 10; //ERROR! 'posx' is private for modification
@@ -233,12 +231,13 @@ public:
         posz = zz;
     }
 };
+```
 
 __________
 Interfaces\
 [interface] keyword
-
-interface IReadable {\
+```
+interface IReadable {
 
     virtual unsigned int64 read( void* , unsigned int64 size ) =0; //can contains only pure virtual methods
 
@@ -265,37 +264,40 @@ interface IReadable {\
 
     virtual unsigned int64 peek( void* , unsigned int64 size ); //no '=0' required, it's pure virtual by default (because INTERFACE)
 };
-
+```
+```
 class StringReadable :public IReadable {...}; //read data from string\
 class FileReadable :public IReadable {...}; //read data from file stream
-
+```
+```
 new IReadable //ERROR, interface can't be instantiated (even if it's an empty, without methods)
-
 delete IReadable //ERROR, interface can't be deleted
-
+```
+```
 class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
-
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
-
+```
+```
 [dynamic_cast] keyword\
 !! REMOVED !!
+```
 
 ________
 Override\
 [override] keyword\
 override virtual method from base class
-
-class A {\
-    virtual void dump( ostream& )const;\
-};\
-class B :public A {\
+```
+class A {
+    virtual void dump( ostream& )const;
+};
+class B :public A {
 
     override void dump( ostream& )const; //override at beginning, instead of virtual
 
     override dump( ostream& )const; //OK, no return value required, becase base class
 
 };
-
+```
 __________
 Exceptions\
 !! REMOVED !!
