@@ -270,8 +270,23 @@ class StringReadable :public IReadable {...}; //read data from string\
 class FileReadable :public IReadable {...}; //read data from file stream
 ```
 ```
-new IReadable //ERROR, interface can't be instantiated (even if it's an empty, without methods)
-delete IReadable //ERROR, interface can't be deleted
+new IReadable; //ERROR, interface can't be instantiated (even if it's an empty, without methods)
+delete IReadable; //ERROR, interface can't be deleted
+```
+```
+delete static_cast<FileReadable*>( &IReadable ); //ERROR! interface can't be cast to derived class
+```
+```
+class EmptyReadable :public IReadable
+{
+    //IReadable method implementations
+
+    //no virtual ~EmptyReadable destructor required, but allowed
+};
+delete EmptyReadable; //OK, delete class
+```
+```
+static_cast<IReadable&>( EmptyReadable ); //OK, can cast derived class EmptyReadable to base interface IReadable
 ```
 ```
 class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
@@ -326,16 +341,18 @@ or something else to detect errors, but no 'goto'-style with jumps
 
 ________
 Literals\
-
-[constexpr] keyword\
+```
+[constexpr] keyword
 !! REMOVED !! replace by [literal] keyword
-
-[constinit] keyword\
+```
+```
+[constinit] keyword
 !! REMOVED !!
-
-[consteval] keyword\
+```
+```
+[consteval] keyword
 !! REMOVED !!
-
+```
 [literal] it's a static const readonly compile-time data
 ```
 literal char Name[] = "My name";
