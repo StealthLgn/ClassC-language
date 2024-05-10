@@ -2,7 +2,6 @@ C-style a general-purpose class-oriented coding language
 
 //not programming language (programming == design, architecture)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
-
 __________
 ## Principles
 
@@ -22,7 +21,6 @@ flexibility does not equal opportunity
 ```
 more 'discipline code'
 ```
-
 _____________________________
 ## The One Definition Rule (ODR)
 ```
@@ -34,21 +32,42 @@ interface
 struct
 typedef
 ```
-
 _______________
 ## Header files
 definitions
 ```
 <myheader.ch>
 ```
-
 _______________
 ## Module files
 translation units
 ```
 <mymodule.cc>
 ```
-
+_____
+## Comments
+### C-style
+```
+/**
+ * Multi line documentations
+*/
+```
+### C++ style
+```
+//inline comments
+//try to minimize comments in your code
+```
+____
+## Preprocessor
+```
+__CLASSC_VERSION__ //language version by compiler
+```
+```
+__FILE__ //at least filename (module name); very important for testing/debugging/error handling
+```
+```
+__LINE__ //line number; very important for testing/debugging/error handling
+```
 __________
 ## Data types
 
@@ -178,7 +197,6 @@ no data, used as return in functions
 ```
 //in future int128...maybe...
 ```
-
 __________
 ## Structures
 ```
@@ -203,7 +221,6 @@ no virtual/pure virtual methods //compiler error
 struct S const {...}; //[const] after struct name
 can be an immutability type
 ```
-
 _______
 ## Classes
 ```
@@ -227,7 +244,6 @@ allow to use virtual base classes
 allow to use virtual methods, pure virtual methods
 allow to use virtual destructors
 ```
-
 ____________
 ## Immutability
 ```
@@ -765,6 +781,21 @@ namespace my
     protected:
 
         class Range {...}; //class 'Range' by any type declared inside 'my' namespace or sub-namespaces
+}
+```
+! namespace aliases is great !
+```
+namespace AA {
+    namespace BB {
+        namespace CC {
+            void doit();
+        }
+    }
+}
+namespace SomeCC = AA::BB::CC;
+void main()
+{
+    SomeCC::doit(); //call 'AA::BB::CC::doit()' function
 }
 ```
 
@@ -1337,10 +1368,63 @@ void main()
 }
 ```
 
-___
-## Functions annotations
+_______
+## Return
 ```
-[[nodiscard]] [[deprecated]] and other else is UGLY!
+[return] keyword
+```
+same as C/C++, but...
+```
+class MyClass
+{
+    this& print() {
+        //do stuff...
+        //return is not req
+    }
+};
+int32 main() :return(int32 exitcode = 0) //declare auto variable
+{
+    //do stuff
+
+    //will return 'exitcode' variable, no UB
+}
+float32 sqrt( float32 v ) :return(v)
+{
+    v = std::sqrt(v);
+
+    //will return 'v' parameter, no UB
+}
+int32 foo()
+{
+    if (false)
+    {
+        return( 0 ); //OK, function return int32
+    }
+
+    //ERROR! function must return value
+}
+```
+```
+literal if (return(Class::method))
+{
+}
+else literal if (return(Class::method) == void)
+{
+}
+else literal if (! return(Class::method))
+{
+}
+else literal if (return(Class::method)) == const int&)
+{
+}
+else literal if (sizeof(return(Class::method)) == 4)
+{
+}
+```
+___
+## Functions annotations/attributes
+```
+[[nodiscard]] [[deprecated]] [[noreturn]] and other else is UGLY!
 ```
 
 ___
