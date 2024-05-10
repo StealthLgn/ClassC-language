@@ -3,16 +3,18 @@ C-like a general-purpose class-oriented coding language
 //not programming language (programming == design, architecture)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
 
-___________________________\
-"Header" files, definitions\
+___________________________
+"Header" files, definitions
+
 <myheader.ch>
 
-_________________________________\
-"Module" files, translation units\
+_________________________________
+"Module" files, translation units
+
 <mymodule.cc>
 
 __________
-Data types\
+Data types
 
 *  bool\
     8 bits\
@@ -43,24 +45,29 @@ Data types\
 
 *  unsigned int16\
 
-  int32\
-  signed int32\
-  unsigned int32\
+*  int32\
+  
+*  signed int32\
+  
+*  unsigned int32\
 
-  int64\
-  signed int64\
-  unsigned int64\
+*  int64\
+  
+*  signed int64\
+  
+*  unsigned int64\
 
   //in future int128...
 
-  float16 //
+*   float16 //
 
-  float32
+*  float32
 
-  float64
+*  float64
 
-  double32
+*  double32
 
-  double64
-
-  void //no data, used as return in functions
+*  double6
+  
+*  void\
+  no data, used as return in functions
