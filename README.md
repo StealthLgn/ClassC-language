@@ -765,6 +765,7 @@ class My
     }
 };
 ```
+'this&' as return value
 ```
 class Output
 {
@@ -810,10 +811,12 @@ Enum\
 
 ! great constant declaration !
 ```
+//some enum
 enum WindowMode //by default enum size equal to sizeof(void*) pointer (16 bits, 32, 64...)
 {
     Fullscreen = 0, Borderless, Windowed,
 };
+//some enum with data type
 enum FileMode : int32 //force to int32
 {
     Create,Open,Append,Undefined,
@@ -824,9 +827,13 @@ void main()
 }
 void foo( FileMode n )
 {
-    literal char name[] = enum(n); //ERROR! n is not a literal -- now 'enum' is a runtime-function to find string (if not found -- [""] empty string will be returned)
+    literal char name[] = enum(n); //ERROR! 'n' is not a literal -- now 'enum' is a runtime-function to find string (if not found -- [""] empty string will be returned)
+
+    literal FileMode otherenum = FileMode::Append;
+    literal char name[] = enum(otherenum); //OK, 'otherenum' is a literal now
 
     std::string othername = "Append";
+    othername = enum(FileMode::Append); //OK, literal string to std::string is allowed
     n = enum<FileMode>( othername.c_str() , FileMode::Undefined ); //OK, try to cast string 'othername' to 'enum FileMode'; if not found -- use Undefined as default
 
     //allow to use 'FileMode::Undefined' with scope '::'
