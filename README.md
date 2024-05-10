@@ -4,7 +4,7 @@ C-style a general-purpose class-oriented coding language
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
 
 __________
-Principles
+## Principles
 
     1.Encapsulation
     //prevent change state outside of object
@@ -24,7 +24,7 @@ more 'discipline code'
 ```
 
 _____________________________
-The One Definition Rule (ODR)
+## The One Definition Rule (ODR)
 ```
 "cannot have more than one definition by translation unit"
 enum
@@ -35,20 +35,22 @@ struct
 typedef
 ```
 
-___________________________
-"Header" files, definitions
+_______________
+## Header files
+definitions
 ```
 <myheader.ch>
 ```
 
-_________________________________
-"Module" files, translation units
+_______________
+## Module files
+translation units
 ```
 <mymodule.cc>
 ```
 
 __________
-Data types
+## Data types
 
 *  bool
 ```
@@ -178,7 +180,7 @@ no data, used as return in functions
 ```
 
 __________
-Structures
+## Structures
 ```
 [struct] keyword
 ```
@@ -203,11 +205,11 @@ can be an immutability type
 ```
 
 _______
-Classes
+## Classes
 ```
 [class] keyword
 ```
-same a 'C/C++', but...
+same a 'C++', but...
 
 *  inheritance
 ```
@@ -227,7 +229,7 @@ allow to use virtual destructors
 ```
 
 ____________
-Immutability
+## Immutability
 ```
 [const] keyword
 ```
@@ -274,7 +276,7 @@ void main() {
 ```
 
 __________
-Mutability
+## Mutability
 ```
 [mutable] keyword
 ```
@@ -305,7 +307,7 @@ class A
 ```
 
 ____________________
-Read only attributes
+## Read only attributes
 ```
 [readonly] keyword
 ```
@@ -344,7 +346,7 @@ class Point3D :public Point2D
 ```
 
 __________
-Interfaces
+## Interfaces
 ```
 [interface] keyword
 ```
@@ -418,7 +420,7 @@ no down casting
 ```
 
 ________
-Override
+## Override
 ```
 [override] keyword
 ```
@@ -439,7 +441,7 @@ class C :public B
 };
 ```
 __________
-Exceptions\
+## Exceptions\
 !! REMOVED !!
 ```
 [try] keyword removed
@@ -465,7 +467,7 @@ console/terminal\
 or something else to detect errors, but no 'goto'-style with jumps
 
 ____
-goto
+## goto
 ```
 [goto] keyword removed :)
 ```
@@ -474,7 +476,7 @@ but allowed in 'extern "C" {...}' for back-compat :(
 ```
 
 ________
-Literals
+## Literals
 ```
 [constexpr] keyword
 !! REMOVED !! replaced by [literal] keyword
@@ -578,7 +580,7 @@ void some( int32 aa ) {
 }
 ```
 ___________________
-Literal expressions
+## Literal expressions
 ```
 template< typename A , typename B > void some()
 {
@@ -611,7 +613,7 @@ template< typename A , typename B > void some()
 ```
 
 ________________
-Move constructor
+## Move constructor
 ```
 class A
 {
@@ -620,7 +622,7 @@ class A
 ```
 
 ________
-Typedefs
+## Typedef and decltype
 ```
 [typedef] keyword
 ```
@@ -671,7 +673,7 @@ template<typename T> void some( T xx , T yy )
 ```
 
 ____
-Auto
+## Auto
 ```
 [auto] keyword
 ```
@@ -709,7 +711,7 @@ All types BEFORE function name
 ```
 
 __________
-Namespaces
+## Namespaces
 ```
 [namespace] keyword
 ```
@@ -768,7 +770,7 @@ namespace my
 ```
 
 ______
-Static
+## Static
 ```
 [static] keyword
 ```
@@ -808,7 +810,7 @@ class File
 ```
 
 ____________
-Non-Copyable
+## Non-Copyable
 ```
 ?? 'noncopyable' keyword ?? less keywords
 use 'true' keyword instead
@@ -852,7 +854,7 @@ M func()
 ```
 
 ____
-THIS
+## THIS
 ```
 [this] keyword
 ```
@@ -935,7 +937,7 @@ void main()
 ```
 
 ______
-Thread
+## Thread
 ```
 [thread] keyword
 dangerous keyword
@@ -943,9 +945,12 @@ dangerous keyword
 ```
 thread(int32) PerThreadValue; //thread-local-storage variable
 ```
+```
+?? or use std::thread_local<int32> PerThreadValue ??
+```
 
 ____
-Enum
+## Enum
 ```
 [enum] keyword
 ```
@@ -981,7 +986,7 @@ void foo( FileMode n )
 ```
 
 _____
-Final
+## Final
 ```
 [final] keyword
 !! REMOVED !!
@@ -992,14 +997,14 @@ This keyword is broke our idea
 ```
 
 ________
-Volatile
+## Volatile
 ```
 [volatile] keyword
 !! REMOVED !!
 ```
 
 ____________________
-Template annotations
+## Template annotations
 ```
 template< typename T , class C , struct S , enum E , interface I >
 void some()
@@ -1054,7 +1059,7 @@ void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 ```
 
 ________________________
-Auto template parameters\
+## Auto template parameters\
 no [auto] in return value, no [auto] in function parameters\
 need to teach compiler detect parameters
 ```
@@ -1115,7 +1120,7 @@ void update( std::vector<int32>& );
 ```
 
 ______
-Lambda\
+## Lambda\
 no lambda functions/expressions\
 no [lambda] keyword\
 it's right-way to procedure code\
@@ -1123,7 +1128,7 @@ lambda inside lambda inside lambda inside lambda...\
 this is a functional programming, not a class-based
 
 _____________
-VOID pointers\
+## VOID pointers\
 Pandora's Box in class-based coding
 ```
 libc/unix use void*
@@ -1134,7 +1139,7 @@ other c-libs use void* (script lua)
 and we can't break 'C' compatibility :(
 
 ______
-Friend
+## Friend
 ```
 [friend] keyword
 !! MINIMIZE FRIENDS AS POSIBLE !!
@@ -1163,14 +1168,14 @@ void some()
 ```
 
 __________
-Reflection
+## Reflection
 ```
 !! completely breaks encapsulation !!
 !! NO REFLECTION !!
 ```
 
 _____
-Union
+## Union
 ```
 [union] keyword
 ```
@@ -1233,7 +1238,7 @@ extern "C"
 ```
 
 ______________
-std::allocator
+## std::allocator
 ```
 namespace std
 {
@@ -1261,7 +1266,7 @@ namespace std
 }
 ```
 __________
-While loop
+## While loop
 ```
 [while] keyword
 ```
@@ -1282,7 +1287,7 @@ void method()const
 ```
 
 _______
-# Size OF
+## Size OF
 ```
 [sizeof] keyword
 ```
@@ -1294,20 +1299,20 @@ struct sizeof(MyStruct,32) //'struct MyStruct'
 ```
 
 ________
-# Align OF
+## Align OF
 ```
 [alignof] keyword
 ```
 same as 'C++', but...
 
 _____________________
-Functions annotations
+## Functions annotations
 ```
 [[nodiscard]] [[deprecated]] and other else is UGLY!
 ```
 
 _____________________
-Remove other keywords
+## Remove other keywords
 ```
 alignas
 
