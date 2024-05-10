@@ -183,7 +183,7 @@ Mutability\
 [mutable] keyword
 "C++": Field (attribute) of class can be changed in [const] method //bad name! method can't be a const, it's a something different
 but...
-
+```
 class A {
 
     mutable int32 m_value;
@@ -201,33 +201,48 @@ class A {
         return( m_value == 0 );
     }
 };
-
-[const_cast] keyword\
+```
+```
+[const_cast] keyword
 !! REMOVED !!
+```
 
 ____________________
 Read only attributes\
 [readonly] keyword
 
-!! STOP USING getters !!
+!! STOP USING getters/accessors !!
+!! STOP calling method as get*... !!
+
 ```
-class Point2D {
-public:
+class Point2D
+{ public:
+
     readonly int32 posx,posy; //private attributes, but opened for read-only outside
+
     void move( int32 xx , int32 yy );
 };
-void main() {
+void main()
+{
     Point2D coords( 10 , 20 );
+
     std::cout << coords.posx; //OK, public access; no 'get_position()' required; read-access to memory
+
     coords.posx = 11; //ERROR! read-only!
+
     coords.move( 11 , 21 ); //OK, public method; point will move itself
 }
-class Point3D :public Point2D {
-public:
+class Point3D :public Point2D
+{public:
+
     readonly int32 posz;
-    void move( int32 xx , int32 yy , int32 zz ) {
+
+    void move( int32 xx , int32 yy , int32 zz )
+    {
         posx = 10; //ERROR! 'posx' is private for modification
+
         Point2D::move( xx , yy ); //OK, public method
+
         posz = zz;
     }
 };
@@ -274,7 +289,7 @@ new IReadable; //ERROR, interface can't be instantiated (even if it's an empty, 
 delete IReadable; //ERROR, interface can't be deleted
 ```
 ```
-delete static_cast<FileReadable*>( &IReadable ); //ERROR! interface can't be cast to derived class
+delete static_cast< FileReadable* >( &IReadable ); //ERROR! interface can't be cast to derived class
 ```
 ```
 class EmptyReadable :public IReadable
@@ -286,7 +301,7 @@ class EmptyReadable :public IReadable
 delete EmptyReadable; //OK, delete class
 ```
 ```
-static_cast<IReadable&>( EmptyReadable ); //OK, can cast derived class EmptyReadable to base interface IReadable
+static_cast< IReadable& >( EmptyReadable ); //OK, can cast derived 'class EmptyReadable' to base 'interface IReadable'
 ```
 ```
 class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
@@ -362,6 +377,31 @@ void procedure( literal char* txt ); //literal only data in 'txt'
 ```
 ```
 void func()literal; //literal only expressions in functions; prevent to use #define MACRO
+
+literal int32 PlatformBits = 64; //x64 arch
+literal int32 calculate_bytes()literal //return literal int32 and use only literal statements
+{
+    literal if ( PlatformBits == 16 )
+    {
+        std::cout << PlatformBits; //ERROR! 'operator <<' is not a literal function/operator
+        return( 2 ); //OK, return literal
+    }
+    else literal if ( PlatformBits == 32 )
+    {
+        some_foo(); //ERROR! 'some_foo' is not a literal functions
+        static const int32 Bits32 = 4; //OK, declara static const in function
+        return( Bits32 ); //ERROR! 'Bits32' is not a literal
+    }
+    else
+    literal if ( PlatformBits == 64 )
+    {
+        return( 8 ); //OK, return literal 8
+    }
+    else //last else is 'literal else' too!
+    {
+        static_assert; //stop compilation, if no valid statements
+    }
+}
 ```
 ```
 literal int32 func() { //return literal-only in32 data
