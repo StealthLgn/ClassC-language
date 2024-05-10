@@ -1281,6 +1281,25 @@ void method()const
 }
 ```
 
+_______
+# Size OF
+```
+[sizeof] keyword
+```
+same as 'C', but...
+```
+struct sizeof(MyStruct,32) //'struct MyStruct'
+{
+};
+```
+
+________
+# Align OF
+```
+[alignof] keyword
+```
+same as 'C++', but...
+
 _____________________
 Functions annotations
 ```
