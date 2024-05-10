@@ -414,6 +414,9 @@ literal int32 calculate_bytes()literal //return literal int32 and use only liter
         some_foo(); //ERROR! 'some_foo' is not a literal functions
         static const int32 Bits32 = 4; //OK, declara static const in function
         return( Bits32 ); //ERROR! 'Bits32' is not a literal
+
+        //static const <= literal; //OK
+        //literal <= static const; //ERROR
     }
     else
     if ( PlatformBits == 64 ) //no 'literal' keyword required, because all statement is literal
@@ -532,4 +535,13 @@ bool func( const T& container )
     auto count = some_count(); //but inside a function it's good!
     auto iter = container.cbegin(); //no horrible 'typedef typename T::iterator  iterator' or something like this
 }
+```
+```
+//C++
+auto (*p)() -> int; // declares p as pointer to function returning int
+auto (*q)() -> auto = p; // declares q as pointer to function returning T, where T is deduced from the type of p
+
+now:
+int32 (*p)();
+decltype(p) (*q)(); //use [decltype] keyword like normal function without ->[&(*...)]<-
 ```
