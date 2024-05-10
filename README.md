@@ -332,12 +332,14 @@ static_cast< IReadable& >( EmptyReadable ); //OK, can cast derived 'class EmptyR
 ```
 class FileStream :public IReadable, public IWritable {...}; //multi inheritance is OK
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
+copy( FileStream() , MemoryStream() ); //OK, create temp objects (no 'const&' required)
 ```
 ```
 [dynamic_cast] keyword
 !! REMOVED !!
 dynamic_cast searching a dervied class...
 how ?? by vtable ?? dont touch vtable !!
+no down casting
 ```
 
 ________
@@ -345,15 +347,15 @@ Override\
 [override] keyword\
 override virtual method from base class
 ```
-class A {
+class A
+{
     virtual void dump( ostream& )const;
 };
-class B :public A {
-
+class B :public A
+{
     override void dump( ostream& )const; //override at beginning, instead of virtual
 
     override dump( ostream& )const; //OK, no return value required, because base class
-
 };
 ```
 __________
@@ -386,6 +388,9 @@ ____
 goto\
 ```
 [goto] keyword removed :)
+```
+```
+but allowed in 'extern "C" {...}' for back-compat :(
 ```
 
 ________
@@ -523,6 +528,16 @@ global scope
     }
 }
 ```
+```
+template<typename T> void some( T xx , T yy )
+{
+    std::vector< typedef(xx) > arr; //OK, use [typedef()] keyword in template parameters to deduce type
+}
+```
+```
+[decltype] keyword removed
+```
+
 ____
 Auto
 ```
@@ -554,5 +569,43 @@ auto (*q)() -> auto = p; // declares q as pointer to function returning T, where
 
 now:
 int32 (*p)();
-decltype(p) (*q)(); //use [decltype] keyword like normal function without ->[&(*...)]<-
+typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal function without ->[&(*...)]<-
+```
+
+__________
+Namespaces
+[namespace] keyword
+
+! great for code organization !
+
+```
+namespace std
+{
+    //standart language library
+    //any user extensions in this namespace is !! NOT ALLOWED !!
+}
+```
+```
+namespace stdext
+{
+    using namespace std;
+
+    //custom namespace for user extensions; like 'boost' in C++
+}
+```
+access specifiers in namespaces
+```
+namespace my
+{
+    public: //not required --public by default
+
+        enum access_mode //enum in public section, any one can use 'my::access_mode'
+        {
+            read_only=0, write_only, read_write, num_modes,
+        };
+
+    private:
+
+        template
+}
 ```
