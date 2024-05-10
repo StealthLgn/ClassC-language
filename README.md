@@ -1036,4 +1036,69 @@ no lambda functions/expressions\
 no [lambda] keyword\
 it's right-way to procedure code\
 lambda inside lambda inside lambda inside lambda...\
-this is a functional programming, not class-based
+this is a functional programming, not a class-based
+
+_____________
+VOID pointers\
+Pandora's Box in class-based coding
+
+_____
+Union
+```
+[union] keyword
+```
+It's destroy objects idea -- now it's just a memory :(
+```
+union
+{
+    int8,int16,int32,int64; //OK
+
+    float16,float32,float64; //OK
+
+    char[]; //OK
+
+    void*; //OK
+
+    interface*; //ERROR! no 'interface' keyword allowed
+
+    class*; //??ERROR?? if you need data struct, use 'struct' keyword, not a 'class'
+
+    struct*; //OK, structs allowed
+
+    const(struct); //ERROR! const immutable type - not allowed
+};
+```
+```
+struct X const
+{
+    readonly int32 Value;
+    X( int32 v ) :Value(v) {;}
+};
+//and now
+union
+{
+    int32 B;
+    X xx; //ERRO! constructor in union
+};
+//ok, then
+union
+{
+    int32 B;
+    char data[sizeof(X)]; //for placement new
+};
+X* ptr = new (data) X( 10 );
+//now 'union:B' at same address as 'X:Value'
+//'B' == 10
+//'X:Value' == 10
+B = 32; //OK, int32 is non-const, non-readonly
+//now 'X:Value' == 32 !! READONLY value changed !! outside of 'const struct' :(
+```
+```
+?? what about ??
+extern "C"
+{
+    union
+    {
+    };
+}
+```
