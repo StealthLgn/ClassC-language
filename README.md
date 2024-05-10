@@ -821,6 +821,21 @@ THIS
 ```
 [this] keyword
 ```
+[this] is now reference (not a pointer)
+```
+class A
+{
+    readonly std::string Username;
+    A()
+    {
+        this.Username; //OK, no -> pointers
+
+        this->Username; //ERROR! this is not a pointer;
+
+        //prevent 'delete this'
+    }
+};
+```
 secondary constructors
 ```
 class My
@@ -852,13 +867,23 @@ class Output
     Output& operator<< (bool); //operator<<
     Output& operator<< (float32); //OK, operator overloading (static polymorphism)
 
-    this& operator<< (int32); //OK, return 'this' type
+    this& operator<< (int32) //OK, return 'this' type
+    {
+        //some print IWritable:write( int32 );
+
+        //no return required, because 'this&' (no UB)
+        return( this ); //but you can ('this' is reference, not a pointer)
+    }
 };
 class MyOutput :public Output
 {
     this& operator<< (const Class&); //OK, operator overloading, return 'this' type
 
     virtual this& write( const void* , stream_size ); //ERROR! no 'this&' allowed in virtual functions (yet)
+
+    static this& get(); //ERROR! 'function get' is static, no object instance -- 'this' is not allowed
+    static this& get( MyOutput& ); //ERROR! same
+    static MyOutput& get( MyOutput& ); //OK
 };
 void main()
 {
@@ -1029,6 +1054,30 @@ void main()
     next_doit( Command() ); //ERROR! 1) no explicit params, 2) no constructor type, 3) 'function next_doit' don't know about parameter T == couldn't decuce parameter 'A' for 'struct Command'
 }
 ```
+```
+std::vector<int32> collect();
+
+void main()
+{
+    std::vector collection = collect(); //OK, 'collection' will be 'std::vector<int32>' as return value from 'collect()'
+
+    std::vector otherarr; //ERROR! couldn't deduce template parameter 'std::vector<T,Alloc>'
+
+    std::vector vec = { 0 , 1 , 2 }; //OK, use typename from constructor (initializator list with 'int32') -- no 'vec' is a 'std::vector<int32>'
+
+    //1) explicit parameters: high priority
+
+    //2) second chance to deduce parameters from constructor
+
+    //3) last chance to deduce parameters from 'l-value' type
+
+    update( std::vector() ); //OK, deduce parameter <T> from 'update' function argument (create empty temp 'std::vector' on a stack)
+
+    update( std::vector<float32>() ); //ERROR! different types 'std::vector<float32>', but function 'update' req 'std::vector<int32>'
+}
+
+void update( std::vector<int32>& );
+```
 
 ______
 Lambda\
@@ -1041,6 +1090,11 @@ this is a functional programming, not a class-based
 _____________
 VOID pointers\
 Pandora's Box in class-based coding
+```
+libc use void*
+winapi use void*
+other c-libs use void* (script lua)
+```
 
 _____
 Union
@@ -1059,9 +1113,11 @@ union
 
     void*; //OK
 
-    interface*; //ERROR! no 'interface' keyword allowed
+    interface*; //ERROR! no 'interface' allowed
 
     class*; //??ERROR?? if you need data struct, use 'struct' keyword, not a 'class'
+
+    virtual(class); //ERROR! virtual classes (virtual destructor, with interfaces or virtual functions) is not allowed
 
     struct*; //OK, structs allowed
 
