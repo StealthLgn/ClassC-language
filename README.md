@@ -60,6 +60,55 @@ class Widget
 };
 thats object!
 ```
+______
+## Composition
+combine attributes with objects
+```
+inheritance vs. composition
+
+bad idea, no 'versus'
+inheritance AND composition
+```
+```
+interface allocator
+{
+    virtual void* allocate( memory_size ) =0;
+};
+class HeapAllocator :public allocator
+{
+    override allocate( memory_size sz )
+    {
+        return( Platform::allocate( sz ) );
+    }
+};
+class LoggerAllocator :public allocator
+{
+    allocator& Parent;
+    LoggerAllocator( allocator& );
+
+    override allocate( memory_size sz )
+    {
+        log( "allocate size" );
+        return( Parent.allocate( sz ) );
+    }
+};
+void main()
+{
+    app_run( LoggerAllocator( HeapAllocator() ) );
+}
+```
+```
+void main()
+{
+    Engine( EmptySystems() ).run();
+
+    Engine( Systems( Loop( EmptyProgram() ) ) ).run();
+
+    Engine( MySystems( Loop( Program( User( "folder_path" , Settings() ) , Database("path") , Offline() ) ) ) ).run();
+
+    Engine( MySystems( Loop( Program( User( "folder_path" , Settings() ) , MySqlDatabase("path") , Online("address:port") ) ) ) ).run();
+}
+```
 _____________________________
 ## The One Definition Rule (ODR)
 ```
@@ -343,7 +392,6 @@ void main() {
     Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters
 }
 ```
-
 __________
 ## Mutability
 ```
@@ -468,6 +516,33 @@ interface IEmpty
 {
     //ERROR! Interface can't be empty! At least one method
 };
+```
+```
+extern "C"
+{
+    #include <libc_function.h>
+
+    typedef interface IFace { //ERROR! no 'interfaces' in 'C', unknown keyword
+    } IFace;
+
+    void* libc_function( void* userdata )
+    {
+        //try to cast
+        OtherInterface* ptr = ((OtherInterface*)userdata); //ERROR! 'interface OtherInterface' is not 'extern C'
+
+        typedef OtherInterface CInterface; //ERROR! 'interface OtherInterface' is not 'extern C'
+
+        return( userdata ); //OK
+    }
+}
+void main()
+{
+    OtherInterface* ptr;
+
+    libc_function( ptr ); //OK, void* in 'C'
+
+    ptr = static_cast< OtherInterface* >( libc_function(ptr) ); //OK, so bad with void* :(
+}
 ```
 ```
 class StringReadable :public IReadable {...}; //read data from string
@@ -719,12 +794,25 @@ ________________
 class A
 {
     A( A&& other ); //!! move constructor is fantastic !!
+
+    this& operator= ( A&& ); //move assignment operator
 };
+void main()
+{
+    A somea;
+
+    //do stuff
+
+    A othera &&= somea; // 'operator &&=' call a move constructor (no 'static_cast< TYPE&& >' is needed)
+
+    othera &&= A(); // 'operator &&=' call move assignment operator 'operator=(&&)'
+}
 ```
 ________
 ## Typedef and decltype
 ```
 [typedef] keyword
+[decltype] keyword removed
 ```
 same as 'C/C++', but...
 
@@ -769,7 +857,68 @@ template<typename T> void some( T xx , T yy )
 }
 ```
 ```
-[decltype] keyword removed
+void func( typedef int32 p ); //ERROR!
+
+typedef struct MyStruct {}; //ERROR! no 'typedefs' in struct declarations
+struct MyStruct {}; typedef MyStruct  data_type; //OK
+
+typedef class MyClass {} OtherClass; //ERROR! no 'typedefs' in class declarations
+class MyClass {}; typedef class MyClass  OtherClass, *OtherClassPtr; //OK
+
+typedef interface IFace {}; //ERROR! no 'typedefs' in interface declarations
+interface IFace {}; typedef IFace  some_interface; //OK
+
+extern "C"
+{
+    //OK, for 'C' back-compat
+    typedef struct MyStruct {
+    } MyStruct;
+}
+```
+____
+## Static cast
+```
+[static_cast] keyword
+```
+enums
+```
+enum MyEnum : int32
+{
+    //constants...
+    E1=0,E2,E3,E4=4,
+};
+void main()
+{
+    MyEnum e = int32(0); //OK
+
+    MyEnum e = int16(0); //OK
+
+    MyEnum e = int64(0); //OK, but truncation from 'int64' to 'enum MyEnum:int32'
+
+    e = static_cast<MyEnum>(0); //OK
+
+    literal MyEnum e = int32(0); //ERROR! literal only
+    literal MyEnum e = literal int32(0); //OK
+
+    literal MyEnum e = literal int32(5); //ERROR! 'enum MyEnum' does not contains 'value 5' (4 is max)
+    literal MyEnum e = literal int32(4); //OK, (E4 == '4')
+}
+```
+no down casting
+```
+class A
+{
+};
+class B :public A
+{
+};
+void main()
+{
+    B bb;
+    A& aa = bb; //OK, derived 'B' to base 'A'
+
+    B& other = static_cast<B&>(aa); //ERROR! no down-casting
+}
 ```
 ____
 ## Auto
@@ -984,7 +1133,7 @@ class A
 
         this->Username; //ERROR! 'this' is not a pointer;
 
-        //prevent 'delete this'
+        //no 'delete this'
     }
 };
 ```
@@ -1009,7 +1158,6 @@ class My
     }
 };
 ```
-
 'this&' as return value
 ```
 class Output
@@ -1536,7 +1684,7 @@ but now...
 ___
 ## Functions annotations/attributes
 ```
-[[nodiscard]] [[deprecated]] [[noreturn]] [[maybe_unused]] and other else is UGLY!
+[[nodiscard]] [[deprecated]] [[noreturn]] [[maybe_unused]] and other else are UGLY!
 !! no attrubutes/annotations !!
 ```
 ___
