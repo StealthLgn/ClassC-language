@@ -111,17 +111,19 @@ __LINE__ //line number; very important for testing/debugging/error handling
 #define true  false //ERROR! no language 'keywords' in define
 ```
 ```
-#include once //include this file only once in translation unit
 #include <memory> //only <> breckets
+
 #include "file.ch" //ERROR! use <file.ch> instead
+
+#include once //include this file only once in translation unit
 ```
 ```
 #pragma //some compiler extensions
+
 __CLASSC_NOEXTENSIONS__ //if extensions are disabled by compiler
 ```
 __________
 ## Data types
-
 *  bool
 ```
 8 bits
@@ -352,17 +354,33 @@ __________
 class A
 {
     mutable int32 m_value;
+    const int32 m_const;
+    bool m_flag;
 
-    void update()const {
+    void update()const
+    {
         ++m_value; //ERROR! const method, m_value can't be changed! If method 'const' -- it's CONST
+
+        ++m_const; //ERROR! 'm_const' declared as const
+
+        m_flag = true; //ERROR! const method
     }
 
-    void check()const mutable {
+    void check()const mutable
+    {
         ++m_value; //OK, mutable method allow to change mutable attribute
+
+        ++m_const; //ERROR! 'm_const' declared as const
+
+        m_flag = true; //ERROR! const method
     }
 
-    bool valid()const {
+    bool valid()const
+    {
         check(); //OK, can call const method
+
+        ++m_const; //ERROR! 'm_const' declared as const
+
         return( m_value == 0 );
     }
 };
@@ -564,7 +582,7 @@ literal char* OtherName = nullptr; //OK, null address
 void procedure( literal char* txt ); //literal only data in 'txt'
 ```
 ```
-void func()literal; //literal only expressions in functions; prevent to use #define MACRO
+void func()literal; //literal only expressions in functions; replace #define MACRO
 
 literal int32 PlatformBits = 64; //x64 arch
 literal int32 calculate_bytes()literal //return literal int32 and use only literal statements
@@ -588,7 +606,7 @@ literal int32 calculate_bytes()literal //return literal int32 and use only liter
     {
         return( 8 ); //OK, return literal 8
     }
-    else //last else is 'literal else' too!
+    else //last 'else' is 'literal else' too!
     {
         static_assert; //stop compilation, if no valid statements
     }
@@ -676,7 +694,25 @@ template< typename A , typename B > void some()
     { ... }
 }
 ```
-
+____
+## Static assertion
+```
+[static_assert] keyword
+Performs compile-time assertion checking.
+```
+```
+static_assert( bool );
+check 'bool' expression and if 'false' - compilation error
+```
+```
+static_assert( bool , string );
+check 'bool' expression and if 'false' - compilation error with literal 'string' message
+```
+```
+static_assert; //without parameters
+always compilation error
+can be used only inside 'literal if' statements
+```
 ________________
 ## Move constructor
 ```
