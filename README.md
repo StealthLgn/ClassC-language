@@ -721,7 +721,6 @@ class A
     A( A&& other ); //!! move constructor is fantastic !!
 };
 ```
-
 ________
 ## Typedef and decltype
 ```
@@ -772,7 +771,6 @@ template<typename T> void some( T xx , T yy )
 ```
 [decltype] keyword removed
 ```
-
 ____
 ## Auto
 ```
@@ -786,7 +784,6 @@ no auto as return value
 no auto in function parameters
 it's completely broke an idea of templates
 ```
-
 but...
 ```
 template<class T>
@@ -810,7 +807,6 @@ function(...) => ...; //ERROR! =>
 function(...) -> ...; //ERROR! ->
 All types BEFORE function name
 ```
-
 __________
 ## Namespaces
 ```
@@ -929,7 +925,6 @@ class File
     void read(); //OK
 };
 ```
-
 ____________
 ## Non-Copyable
 ```
@@ -973,7 +968,6 @@ M func()
     return( M() ); //ERROR! copy
 }
 ```
-
 ____
 ## THIS
 ```
@@ -1056,7 +1050,6 @@ void main()
     cout << Class(...); //OK, MyOutput::operator<< (const Class&)
 }
 ```
-
 ______
 ## Thread
 ```
@@ -1069,7 +1062,6 @@ thread(int32) PerThreadValue; //thread-local-storage variable
 ```
 ?? or use std::thread_local<int32> PerThreadValue ??
 ```
-
 ____
 ## Enum
 ```
@@ -1105,7 +1097,6 @@ void foo( FileMode n )
     //allow to use 'FileMode::Undefined' with scope '::'
 }
 ```
-
 _____
 ## Final
 ```
@@ -1116,14 +1107,12 @@ _____
 Class-oriented language: we need to extends functionality of each class
 This keyword is broke our idea
 ```
-
 ________
 ## Volatile
 ```
 [volatile] keyword
 !! REMOVED !!
 ```
-
 ____________________
 ## Template annotations
 ```
@@ -1178,11 +1167,13 @@ void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 {
 }
 ```
-
 ________________________
-## Auto template parameters\
-no [auto] in return value, no [auto] in function parameters\
+## Auto template parameters
+```
+no [auto] in return value
+no [auto] in function parameters
 need to teach compiler detect parameters
+```
 ```
 template< class A >
 struct Command
@@ -1239,17 +1230,15 @@ void main()
 
 void update( std::vector<int32>& );
 ```
-
 ______
-## Lambda\
+## Lambda
 no lambda functions/expressions\
 no [lambda] keyword\
 it's right-way to procedure code\
 lambda inside lambda inside lambda inside lambda...\
 this is a functional programming, not a class-based
-
 _____________
-## VOID pointers\
+## VOID pointers
 Pandora's Box in class-based coding
 ```
 libc/unix use void*
@@ -1258,7 +1247,6 @@ other c-libs use void* (script lua)
 ```
 ?? how to protect object memory (const/readonly/static) from [void*] abueses ??\
 and we can't break 'C' compatibility :(
-
 ______
 ## Friend
 ```
@@ -1287,14 +1275,12 @@ void some()
     literal if (friend(A)) //ERROR! 'friend' check is not allowed; this is private :)
 }
 ```
-
 __________
 ## Reflection
 ```
 !! completely breaks encapsulation !!
 !! NO REFLECTION !!
 ```
-
 _____
 ## Union
 ```
@@ -1357,7 +1343,6 @@ extern "C"
     };
 }
 ```
-
 ______________
 ## std::allocator
 ```
