@@ -1524,13 +1524,14 @@ ___
 ```
 Class* p;
 delete p; //call destructor ~Class(), and free memory
-
+```
 but now...
-//0) ?? what about (p != nullptr) ?? auto check
-//1) check type (no interfaces)
-//2) call destructor ~Class();
-//3) free memory
-//4) write 'nullptr' to 'p' (p == nullptr after delete); memory is lost now, no address
+```
+0) ?? what about (p != nullptr) ?? auto check
+1) check type (no interfaces)
+2) call destructor ~Class();
+3) free memory
+4) write 'nullptr' to 'p' (p == nullptr after delete); memory is lost now, no address
 ```
 ___
 ## Functions annotations/attributes
