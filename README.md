@@ -1081,7 +1081,7 @@ extern "C"
     } MyStruct;
 }
 ```
-____
+___
 ## Static cast
 ```
 [static_cast] keyword
@@ -1126,7 +1126,7 @@ void main()
     B& other = static_cast<B&>(aa); //ERROR! no down-casting
 }
 ```
-____
+___
 ## Auto
 ```
 [auto] keyword
@@ -1174,7 +1174,7 @@ void sort( TIter it , itend , TPred predic ); // 'it,itend' is an iterator <TIte
 ```
 //no ugly ( a:int32 , b:int32 )
 ```
-__________
+___
 ## Namespaces
 ```
 [namespace] keyword
@@ -1253,7 +1253,7 @@ namespace //no name
 {
 }
 ```
-______
+___
 ## Static
 ```
 [static] keyword
@@ -1292,7 +1292,7 @@ class File
     void read(); //OK
 };
 ```
-____________
+____
 ## Non-Copyable
 ```
 ?? 'noncopyable' keyword ?? less keywords
@@ -1416,7 +1416,7 @@ void main()
     cout << Class(...); //OK, MyOutput::operator<< (const Class&)
 }
 ```
-______
+___
 ## Thread
 ```
 [thread] keyword
@@ -1508,7 +1508,7 @@ enum Custom :MyClass //ERROR! base integer types only
 {
 };
 ```
-_____
+___
 ## Final
 ```
 [final] keyword
@@ -1518,16 +1518,16 @@ _____
 Class-oriented language: we need to extends functionality of each class
 This keyword is broke our idea
 ```
-________
+___
 ## Volatile
 ```
 [volatile] keyword
 !! REMOVED !!
 ```
-____________________
+___
 ## Template annotations
 ```
-template< typename T , class C , struct S , enum E , interface I >
+template< typename T , class C , struct S , enum E , enum EI:int32 , interface I , class CD:C >
 void some()
 {
     //type T - any
@@ -1538,7 +1538,11 @@ void some()
 
     //type E - any, but enums only
 
+    //type EI - any, but enums only with 'int32' base type
+
     //type I - any, but interfaces only
+
+    //type CD - any, but classes only with base class of 'C' (static_cast<C>( CB ))
 }
 ```
 ```
@@ -1578,7 +1582,7 @@ void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 {
 }
 ```
-________________________
+___
 ## Auto deduce template types
 ```
 no [auto] in return value
@@ -1650,14 +1654,14 @@ void main()
     std::map ff = filter( std::list({"apple" , "avocado" , "banana"}) );
 }
 ```
-______
+___
 ## Lambda
 no lambda functions/expressions\
 no [lambda] keyword\
 it's right-way to procedure code\
 lambda inside lambda inside lambda inside lambda...\
 this is a functional programming, not a class-based
-_____________
+___
 ## VOID pointers
 Pandora's Box in class-based coding
 ```
@@ -1667,7 +1671,7 @@ other c-libs use void* (script lua)
 ```
 ?? how to protect object memory (const/readonly/static) from [void*] abueses ??\
 and we can't break 'C' compatibility :(
-______
+___
 ## Friend
 ```
 [friend] keyword
@@ -1695,18 +1699,18 @@ void some()
     literal if (friend(A)) //ERROR! 'friend' check is not allowed; this is private :)
 }
 ```
-__________
+___
 ## Reflection
 ```
 !! completely breaks encapsulation !!
 !! NO REFLECTION !!
 ```
-_____
+___
 ## Union
 ```
 [union] keyword
 ```
-It's destroy objects idea -- with union our object it's just a memory :(
+It's destroy objects idea -- with union our objects it's just a memory :(
 ```
 union
 {
@@ -1726,7 +1730,7 @@ union
 
     struct*; //OK, structs allowed
 
-    const(struct); //ERROR! const immutable type - not allowed
+    struct const; //ERROR! const immutable type - not allowed
 };
 ```
 ```
@@ -1758,7 +1762,7 @@ B = 32; //OK, int32 is non-const, non-readonly
 ?? what about ??
 extern "C"
 {
-    union
+    union //?? 'union' can be used only in 'extern "C"' sections ??
     {
     };
 }
@@ -1791,7 +1795,7 @@ namespace std
     static allocator& malloc; //global heap allocation
 }
 ```
-__________
+____
 ## While loop
 ```
 [while] keyword
@@ -1809,19 +1813,28 @@ void method()const
     {
     }
     while(); //ERROR! with brackets req a condition
+
+    do
+    {
+    }
+    while; //OK
+
+    //no 'while(true)', but allowed
+
+    //no 'for(;;)', but allowed
 }
 ```
-_______
+___
 ## Size OF
 ```
 [sizeof] keyword
 ```
 same as 'C', but...
 ```
-struct sizeof(MyStruct,32) //'struct MyStruct' should be a 32 bytes; if less/greather -- compiler error
+struct MyStruct sizeof(32) //'struct MyStruct' should be a 32 bytes; if less/greather -- compiler error
 {
 };
-class sizeof(MyClass,16)
+class MyClass sizeof(16)
 {
 };
 ```
@@ -1836,17 +1849,17 @@ void main()
     const std::memorysize total = sizeof(MyStruct); //should be 32 bytes; return literal unsigned int32
 }
 ```
-________
+___
 ## Align OF
 ```
 [alignof] keyword
 ```
 same as 'C++', but...
 ```
-struct alignof(MyStruct,4) //'struct MyStruct' aligned by 4 bytes
+struct MyStruct alignof(4) //'struct MyStruct' aligned by 4 bytes
 {
 };
-class alignof(MyClass,8)
+class MyClass alignof(8)
 {
 };
 ```
@@ -1860,6 +1873,14 @@ void main()
 {
     const std::memorysize total = alignof(MyStruct); //should be 4 bytes; return literal unsigned int32
 }
+```
+```
+struct MyStruct sizeof(32) alignof(4) //OK, if 'sizeof' is valid for 'alignof'
+{
+};
+struct BadStruct const sizeof(11) alignof(5) //ERROR! imposible achive 'sizeof' 11 with 'alignof' 5 -- change 'sizeof' or 'alignof'
+{
+};
 ```
 ___
 ## Static arrays
@@ -1883,10 +1904,16 @@ std::memorysize calc( int32 limit )
 {
     char text[limit] = {0};
     limit = 0;
-    return( sizeof(text) );
+    return( sizeof(text) ); //ERROR! 'text' is not a static array, because use variable 'limit'
+}
+std::memorysize calc_correct( literal int32 limit )
+{
+    char text[limit] = {0};
+    limit = 0; //ERROR! 'limit' is literal
+    return( sizeof(text) ); //OK
 }
 ```
-_______
+___
 ## Return
 ```
 [return] keyword
