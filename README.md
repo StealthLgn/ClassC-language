@@ -390,6 +390,8 @@ namespace
 const
 static
 true
+sizeof
+alignof
 ```
 ___
 ## Structures
