@@ -1456,6 +1456,20 @@ thread(int32) PerThreadValue; //thread-local-storage variable
 ```
 ?? or use std::thread_local<int32> PerThreadValue ??
 ```
+```
+void main()
+{
+    thread
+    {
+        //corutine scope
+
+        parallel();
+    }
+}
+void parallel()thread //corutine function
+{
+}
+```
 ____
 ## Enum
 ```
