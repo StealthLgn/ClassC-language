@@ -167,13 +167,18 @@ ___
 ____
 ## Preprocessor
 ```
+format __CLASSC_[XXX]__
+```
+```
 __CLASSC_VERSION__ //language version by compiler; 2022, 2025, 2030 (no bit mask)
 ```
 ```
 __FILE__ //at least filename (module name); very important for testing/debugging/error handling
+__CLASSC_FILE__
 ```
 ```
 __LINE__ //line number; very important for testing/debugging/error handling
+__CLASSC_LINE__
 ```
 ```
 #define true  false //ERROR! no language 'keywords' in define
@@ -189,6 +194,19 @@ __LINE__ //line number; very important for testing/debugging/error handling
 #pragma //some compiler extensions
 
 __CLASSC_NOEXTENSIONS__ //if extensions are disabled by compiler
+```
+```
+__CLASSC_ARCH__ == 32 //x32
+__CLASSC_ARCH__ == 64 //x64
+```
+```
+__CLASSC_COMPILER_[name]__ == version //#ifdef compiler 'GCC', 'MS', 'CLANG' ...
+```
+```
+__CLASSC_CPU_[name]__ //#ifdef target machine cpu 'X86', 'X64', 'X86X64' ...
+```
+```
+__CLASSC_CPUEXT_[name]__ //#ifdef target cpu feature enabled 'SSE', 'SSE2', 'SSSE3', 'AVX', 'RDRND' ...
 ```
 ___
 ## Data types
