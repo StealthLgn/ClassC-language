@@ -1319,15 +1319,14 @@ NonDynamic* ptr = &obj; //?? what about pointers to static classes/structs/inter
 delete ptr; //ERROR! 'class NonDynamic' is a static; it can't be created dynamicly with 'operator new'
 ```
 static methods\
-!! MINIMIZE STATIC METHODS AS POSIBLE !! DONT WRITE 'C'-PROCEDURE CODE !!
+bad name - method can't be a 'static', it's a function\
+!! MINIMIZE STATIC 'METHODS' AS POSIBLE !! DONT WRITE 'C'-PROCEDURE CODE !!
 ```
 class File
 {
     static void read( File& f ); //ERROR! can't use class type as parameter inside this class
 
-    void read( File& f ); //OK, operator=, swap(), merge()
-
-    void read(); //OK
+    void swap( File& f ); //OK, operator=, swap(), merge()
 };
 ```
 ____
