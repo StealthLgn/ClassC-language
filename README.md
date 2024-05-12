@@ -651,6 +651,26 @@ struct A const mutable //ERROR! const type can't be a mutable
 {
 };
 ```
+mutable template parameters
+```
+template< typename T >
+void some( mutable T& v ) //non-const, non-literal, non-readonly T&
+{
+}
+void main()
+{
+    literal int32 cc = 0;
+    some( cc ); //ERROR! non-literal only
+
+    const int32 bb = 0;
+    some( bb ); //ERROR! non-const only
+
+    int32 aa = 0;
+    some( aa ); //OK
+
+    some( const_cast<int32&>(bb) ); //ERROR! unknown keyword const_cast, const cast is removed
+}
+```
 ___
 ## Readonly fields
 ```
@@ -1673,13 +1693,6 @@ template< class A , interface B >
 literal bool some()literal
 {
     return( B < A ); //check if interface 'B' is based type for class 'A'
-}
-```
-mutable template parameters
-```
-template< typename T >
-void some( mutable T& v ) //non-const, non-literal, non-readonly T&
-{
 }
 ```
 ___
