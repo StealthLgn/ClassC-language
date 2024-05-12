@@ -4,8 +4,9 @@ in-progress
 
 C-style a general-purpose class-oriented coding language
 
-//not programming language (programming == design, architecture)\
+//not programming language (programming == design, architecture,patterns)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)
+//not a 'C++ killer' or some
 __________
 ## Principles
 
@@ -122,6 +123,21 @@ class
 interface
 struct
 typedef
+```
+```
+//golang
+type MyStruct struct
+{
+};
+func (me*MyStruct) function()
+{
+    //add method 'function' to struct 'MyStruct'
+
+    //anytime
+
+    //anywhere
+}
+//in ClassC lang not allowed
 ```
 _______________
 ## Header files
@@ -313,6 +329,24 @@ same a 'C/C++', but...
 ```
 only other struct can be a base class (no classes, no abstract, no interface...)
 struct is just simple data in memory, it's not an OBJECT
+
+struct A
+{
+};
+struct B :public A //OK
+{
+};
+class CC :public B //ERROR! 'struct' cann't be a base for 'class'
+{
+};
+struct D :public CC //ERROR! CC is a 'class', only 'struct' allowed
+{
+    std::string Name;
+
+    struct sort_name { //OK, nested types
+        bool operator()( const D& , const D& )const;
+    };
+};
 ```
 *  no-virtual
 ```
@@ -652,6 +686,14 @@ ____
 ```
 but allowed in 'extern "C" {...}' for back-compat :(
 ```
+___
+## operator ? :
+```
+return( condition ? if_true : if_false );
+```
+```
+return( condition ?: if_false ); //same as ( condition-value == true ? condition-value : if_false ), like 'elvis operator in Kotlin language'
+```
 ________
 ## Literals
 ```
@@ -975,6 +1017,15 @@ typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal
 function(...) => ...; //ERROR! =>
 function(...) -> ...; //ERROR! ->
 All types BEFORE function name
+```
+___
+## Same parameters type
+```
+void point( int32 xx , yy , zz ); // 'xx,yy,zz' is an <int32>
+```
+```
+template< struct TIter , typename TPred >
+void sort( TIter it , itend , TPred predic ); // 'it,itend' is an iterator <TIter>
 ```
 __________
 ## Namespaces
@@ -1336,7 +1387,7 @@ void some( mutable T& v ) //non-const, non-literal, non-readonly T&
 }
 ```
 ________________________
-## Auto template parameters
+## Auto deduce template types
 ```
 no [auto] in return value
 no [auto] in function parameters
@@ -1397,6 +1448,15 @@ void main()
 }
 
 void update( std::vector<int32>& );
+```
+```
+template< sturct TCont >
+std::map< int32 , std::string > filter( const TCont& container );
+
+void main()
+{
+    std::map ff = filter( std::list({"apple" , "avocado" , "banana"}) );
+}
 ```
 ______
 ## Lambda
@@ -1654,13 +1714,20 @@ int32 main() :return(int32 exitcode = 0) //declare auto variable
 
     //will return 'exitcode' variable, no UB
 }
-float32 sqrt( float32 v ) :return(v)
+float32 func( float32 v ) :return(v) //by default return value 'v'
 {
     v = std::sqrt(v);
 
+    if (v == 0)
+    {
+        return; //stop here and return 'v' parameter
+    }
+
+    v *= v;
+
     //will return 'v' parameter, no UB
 }
-int32 foo()
+int32 other()
 {
     if (false)
     {
