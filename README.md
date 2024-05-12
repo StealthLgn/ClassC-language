@@ -1,3 +1,7 @@
+```
+in-progress
+```
+
 C-style a general-purpose class-oriented coding language
 
 //not programming language (programming == design, architecture)\
@@ -58,7 +62,6 @@ class Widget
 
     virtual void show( bool ); //check state, check already shown and then toggle visibility + maybe other staff
 };
-thats object!
 ```
 ______
 ## Composition
@@ -478,6 +481,20 @@ class Point3D :public Point2D
         posz = zz;
     }
 };
+void func()
+{
+    Point2D coords( 10 , 20 );
+
+    const int32& crefxx = coords.posx; //OK, const reference
+
+    int32& refxx = coords.posx; //ERROR! posx is const (because readonly)
+
+    int32 xx = coords.posx; //OK, copy
+
+    const int32* cptrxx = &coords.posx; //OK, const address
+
+    int32* ptrxx = &coords.posx; //ERROR! posx is const (because readonly)
+}
 ```
 __________
 ## Interfaces
@@ -505,6 +522,7 @@ interface IReadable {
 
     //no copy assignment operator=
     //the compiler does not generate a copy assignment operator
+    //no any operators
 
     bool is_ok()const; //OK, no 'virtual' required, it's pure virtual by default (because INTERFACE)
 
@@ -515,6 +533,8 @@ interface IReadable {
 interface IEmpty
 {
     //ERROR! Interface can't be empty! At least one method
+
+    struct NestedStruct {}; //ERROR! no nested types
 };
 ```
 ```
@@ -566,12 +586,12 @@ EmptyReadable* someptr;
 delete someptr; //OK, delete class
 ```
 ```
-static_cast< IReadable& >( EmptyReadable ); //OK, can cast derived 'class EmptyReadable' to base 'interface IReadable'
+static_cast< IReadable& >( EmptyReadable ); //OK, cast derived 'class EmptyReadable' to base 'interface IReadable'
 ```
 ```
 class FileStream :public IReadable, public IWritable {...}; //OK, multi inheritance
 void copy( IReadable& , IWritable& ); //OK, use interfaces; pure abstractions
-copy( FileStream() , MemoryStream() ); //OK, create temp objects (no 'const&' required)
+copy( FileStream() , MemoryStream() ); //OK, create temp objects on stack (no 'const&' required)
 ```
 ```
 [dynamic_cast] keyword
