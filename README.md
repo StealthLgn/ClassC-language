@@ -181,7 +181,8 @@ __LINE__ //line number; very important for testing/debugging/error handling
 __CLASSC_LINE__
 ```
 ```
-#define true  false //ERROR! no language 'keywords' in define
+#define true  false //ERROR! no language 'keywords' in #define
+#undef true //ERROR! no language 'keywords' in #undef
 ```
 ```
 #include <memory> //only <> breckets
