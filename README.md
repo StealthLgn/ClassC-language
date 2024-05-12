@@ -110,7 +110,7 @@ void main()
 
     Engine( MySystems( Loop( Program( User( "folder_path" , Settings() ) , Database("path") , Offline() ) ) ) ).run();
 
-    Engine( MySystems( Loop( Program( User( "folder_path" , Settings() ) , MySqlDatabase("path") , Online("address:port") ) ) ) ).run();
+    Engine( MySystems( Loop( DebugProgram( DebugUser( "folder_path" , Settings() ) , MySqlDatabase("path") , Online("address:port") ) ) ) ).run();
 }
 ```
 _____________________________
