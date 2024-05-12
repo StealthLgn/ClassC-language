@@ -118,7 +118,6 @@ _____________________________
 ```
 "cannot have more than one definition by translation unit"
 enum
-function
 class
 interface
 struct
