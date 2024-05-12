@@ -300,6 +300,9 @@ only 1(true) or 0(false) -- only one bit used
 64 bit integer, force unsigned
 [0, 18446744073709551615]
 ```
+```
+//in future int128...maybe...
+```
 *  float16
 ```
 16 bit float
@@ -334,9 +337,6 @@ no data, used as return in functions
 ```
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
 //!! this keywords for backward compatibility with 'C' libraries and API !!
-```
-```
-//in future int128...maybe...
 ```
 ___
 ## Declarations
