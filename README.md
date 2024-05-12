@@ -339,6 +339,31 @@ no data, used as return in functions
 //!! this keywords for backward compatibility with 'C' libraries and API !!
 ```
 ___
+## extern "C"
+```
+extern "C"
+{
+    //pure 'C' code
+
+    #include <stdio.h>
+    #include <stdlib.h>
+
+    #include "yourlib.h" //in pure-C include with "" brackets is allowed for compat
+
+    enum {};
+
+    struct {};
+
+    void function();
+
+    const int GVar;
+
+    const float GSome;
+
+    //all types should be marked as 'extern_c' or 'pure_c' when compile
+}
+```
+___
 ## Declarations
 ```
 [category] [name] [specifiers] {  } ;
@@ -363,7 +388,6 @@ ___
 [struct] keyword
 ```
 same a 'C/C++', but...
-
 *  inheritance
 ```
 only other struct can be a base class (no classes, no abstract, no interface...)
@@ -375,8 +399,9 @@ struct A
 struct B :public A //OK
 {
 };
-class CC :public B //ERROR! 'struct' cann't be a base for 'class'
+class CC :public B //ERROR! 'struct' as base type is not allowed (stop mixing classes with data structures, use composition)
 {
+    public readonly B data; //OK, composition
 };
 struct D :public CC //ERROR! CC is a 'class', only 'struct' allowed
 {
@@ -420,7 +445,6 @@ ___
 [class] keyword
 ```
 same a 'C++', but...
-
 *  inheritance
 ```
 only [classes] or [interfaces] can be a base types for classes
@@ -428,7 +452,9 @@ no struct are allowed
 ```
 *  immutability
 ```
-class C const {...}; //[const] after class name
+class C const //[const] after class name
+{
+};
 can be an immutability type
 ```
 *  virtual
@@ -521,7 +547,7 @@ void main() {
     Minimal othermin = min.update( min.calculate() ); //OK, create another Minimal with different parameters
 }
 ```
-__________
+___
 ## Mutability
 ```
 [mutable] keyword
@@ -576,13 +602,12 @@ struct A const mutable //ERROR! const type can't be a mutable
 };
 ```
 ___
-## Read only attributes
+## Readonly fields
 ```
 [readonly] keyword
 ```
 !! STOP USING getters/accessors !!\
 !! STOP calling(naming) methods as get*... !!
-
 ```
 class Point2D
 {public:
@@ -673,8 +698,8 @@ ___
 [interface] keyword
 ```
 ```
-interface IReadable {
-
+interface IReadable
+{
     virtual unsigned int64 read( void* , unsigned int64 size ) =0; //can contains only pure virtual methods
 
     //no constructors
@@ -698,6 +723,8 @@ interface IReadable {
     bool is_ok()const; //OK, no 'virtual' required, it's pure virtual by default (because INTERFACE)
 
     virtual unsigned int64 peek( void* , unsigned int64 size ); //OK, no '=0' required, it's pure virtual by default (because INTERFACE)
+
+    protected: virtual void hidden(); //ERROR! no access specifiers are allowed! interface is always public
 };
 ```
 ```
@@ -939,10 +966,12 @@ ___________________
 ```
 template< typename A , typename B > void some()
 {
-    literal if (A == B) //check type(A) equal to type(B), make compiler some smarter
+    literal if (A == B) //check type(A) equal to type(B), WE NEED SMART COMPILER
     {
         literal char name[] = typename(A); //use 'typename()' keyword to GET typename as literal string by compiler
     }
+    if (A == B) //ERROR! only compile-time if allowed with literals
+    { ... }
     literal if (A < B) //check if type(A) is a base class for type(B)
     { ... }
     literal if (static(A)) //check if type(A) is a static
@@ -965,7 +994,6 @@ template< typename A , typename B > void some()
     literal if (typename(A) == typename(B))
     { ... }
     literal if (A == variableA) //ERROR! type to value checking
-    { ... }
     literal if (A == typedef(variableA)) //OK, use 'typedef()' keyword to deduce type of 'variableA'
     { ... }
 }
@@ -977,11 +1005,11 @@ ____
 Performs compile-time assertion checking.
 ```
 ```
-static_assert( bool );
+static_assert( [bool] );
 check 'bool' expression and if 'false' - compilation error
 ```
 ```
-static_assert( bool , string );
+static_assert( [bool] , [string] );
 check 'bool' expression and if 'false' - compilation error with literal 'string' message
 ```
 ```
