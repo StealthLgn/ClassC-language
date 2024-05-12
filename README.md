@@ -169,21 +169,26 @@ ____
 ```
 format __CLASSC_[XXX]__
 ```
+* Language version
 ```
 __CLASSC_VERSION__ //language version by compiler; 2022, 2025, 2030 (no bit mask)
 ```
+* File name
 ```
 __FILE__ //at least filename (module name); very important for testing/debugging/error handling
 __CLASSC_FILE__
 ```
+* Line number
 ```
 __LINE__ //line number; very important for testing/debugging/error handling
 __CLASSC_LINE__
 ```
+* Define keywords
 ```
 #define true  false //ERROR! no language 'keywords' in #define
 #undef true //ERROR! no language 'keywords' in #undef
 ```
+* Includes
 ```
 #include <memory> //only <> breckets
 
@@ -191,21 +196,26 @@ __CLASSC_LINE__
 
 #include once //include this file only once in translation unit
 ```
+* Compiler extensions
 ```
 #pragma //some compiler extensions
 
 __CLASSC_NOEXTENSIONS__ //if extensions are disabled by compiler
 ```
+* Detect architecture
 ```
 __CLASSC_ARCH__ == 32 //x32
 __CLASSC_ARCH__ == 64 //x64
 ```
+* Detect compiler name
 ```
 __CLASSC_COMPILER_[name]__ == version //#ifdef compiler 'GCC', 'MS', 'CLANG' ...
 ```
+* Detect target cpu
 ```
 __CLASSC_CPU_[name]__ //#ifdef target machine cpu 'X86', 'X64', 'X86X64' ...
 ```
+* Target cpu extensions
 ```
 __CLASSC_CPUEXT_[name]__ //#ifdef target cpu feature enabled 'SSE', 'SSE2', 'SSSE3', 'AVX', 'RDRND' ...
 ```
