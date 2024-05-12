@@ -920,6 +920,27 @@ ____
 ```
 but allowed in 'extern "C" {...}' for back-compat :(
 ```
+```
+void main()
+{
+    goto label; //ERROR! goto is undefined :)
+
+label: //ERROR! labels is undefined
+
+    return;
+}
+extern "C"
+{
+    void fun()
+    {
+        goto label; //OK, in 'extern C' (pure C) allowed :(
+
+    label: //OK, in 'extern C' (pure C) labels are allowed
+
+        return;
+    }
+}
+```
 ___
 ## operator ? :
 ```
