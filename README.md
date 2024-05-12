@@ -1392,6 +1392,62 @@ namespace //no name
 }
 ```
 ___
+## Using
+```
+[using] keyword
+```
+```
+#include <iostream>
+using namespace std; //OK, inject types from namespace 'std'
+```
+```
+#include <iostream>
+void main()
+{
+    using std::string; //OK, inject struct 'std::string' from namespace
+
+    string text = "text";
+}
+```
+```
+template<> using type_name = ... //ERROR! use 'typedef' instead
+```
+```
+class A
+{
+    void dump( ostream& )const;
+};
+class B :public A
+{
+    void dump( writable& )const;
+};
+void main()
+{
+    B bb;
+
+    bb.dump( writable() ); //OK
+    bb.dump( ostream() ); //ERROR in C++, req 'using' keyword; OK in 'ClassC' lang
+
+    //C++ solution
+    //static_cast<A&>(bb).dump( ostream() ); --for what all this ??
+}
+class C :public B
+{
+    void dump( ostream& dc )const //OK, overload & replace method 'dump' from class 'A'
+    {
+        B::dump( dc );
+        dc << "class C dump";
+    }
+};
+void main()
+{
+    C cc;
+
+    cc.dump( writable() ); //OK, use dump from class 'B'
+    cc.dump( ostream() ); //OK, use dump from class 'C'
+}
+```
+___
 ## Static
 ```
 [static] keyword
