@@ -386,9 +386,9 @@ allow to use virtual destructors
 ___
 ## Access Specifiers
 ```
-[public[ keyword
-[protected[ keyword
-[private[ keyword
+[public] keyword
+[protected] keyword
+[private] keyword
 ```
 same as C++, but...
 ```
