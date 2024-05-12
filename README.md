@@ -478,7 +478,7 @@ class A
 disable C-style cast ((type)(other))
 allowed only in extern "C" {...} section for back-compat with C
 ```
-____________________
+___
 ## Read only attributes
 ```
 [readonly] keyword
@@ -490,7 +490,7 @@ ____________________
 class Point2D
 {public:
 
-    readonly int32 posx,posy; //private attributes, but opened for read-only outside
+    readonly int32 posx,posy; //private attributes, but opened for read-only outside; do not use 'get_posx()'
 
     void move( int32 xx , int32 yy );
 };
@@ -527,10 +527,25 @@ void func()
 
     const int32* cptrxx = &coords.posx; //OK, const address
 
+    (*cptrxx) = 10; //ERROR! cptrxx is const
+
+    const_cast<int32*>(cptrxx); //ERROR! no 'const_cast'
+
+    ((int32*)cptrxx); //ERROR! no 'C-style' type cast
+
     int32* ptrxx = &coords.posx; //ERROR! posx is const (because readonly)
+
+    (*c_const_cast( cptrxx )) = 10; //OK, cast 'readonly' witch extern "C" function; so bad with 'C' back-compat, see 'void*' section
+}
+extern "C"
+{
+    int32* c_const_cast( const int32* p )
+    {
+        return( (int32*)p ); //OK, 'C' type cast allowed in extern "C" block
+    }
 }
 ```
-__________
+___
 ## Interfaces
 ```
 [interface] keyword
