@@ -1319,6 +1319,51 @@ void foo( FileMode n )
     //allow to use 'FileMode::Undefined' with scope '::'
 }
 ```
+```
+enum Color
+{
+    ColorA,ColorB,ColorC,
+};
+enum Mode
+{
+    ModeA,ModeB,ModeC
+};
+void main()
+{
+    if (ColorA == Color::ColorB) //OK, compare two colors, enum scope 'Color::' is OK too
+    {
+        std::string = enum(ColorA); //OK, convert to string "ColorA"
+
+        std::string = enum(Color::ColorA); //OK, convert to string "Color::ColorA"
+    }
+
+    if (Mode::ModeA == ColorB) //ERROR! different enum types
+    {
+    }
+
+    if (static_cast<int32>(Mode::ModeA) == static_cast<int32>(ColorB)) //OK, check integers
+    {
+    }
+
+    literal int32 DefaultMode = Mode::ModeC; //OK, enum constants is literals
+}
+enum class Other //ERROR! 'enum class' is removed
+{
+};
+enum Condition :bool //OK
+{
+};
+enum Value :unsigned int8 //OK, clamp to int8, int16, int32, int64
+{
+    MaxValue = 998811, //ERROR! value '998811' is too big for 'unsigned int8'
+};
+enum Range :float32 //ERROR! integers only
+{
+};
+enum Custom :MyClass //ERROR! base integer types only
+{
+};
+```
 _____
 ## Final
 ```
@@ -1778,7 +1823,7 @@ ___
 !! no attrubutes/annotations !!
 ```
 ___
-## Remove other keywords
+## Removed keywords
 ```
 alignas
 
@@ -1871,4 +1916,9 @@ transaction_safe_dynamic
 import
 
 module
+```
+___
+## namespace std
+```
+remove std::locale
 ```
