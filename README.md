@@ -2060,7 +2060,7 @@ const_cast
 
 co_await //use std::objects + std::functions
 
-co_return
+co_return //how corutine implemented ? what about corutine scope ?
 
 co_yield
 
