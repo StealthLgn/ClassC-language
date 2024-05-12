@@ -1019,13 +1019,16 @@ function(...) -> ...; //ERROR! ->
 All types BEFORE function name
 ```
 ___
-## Same parameters type
+## Parameters type
 ```
 void point( int32 xx , yy , zz ); // 'xx,yy,zz' is an <int32>
 ```
 ```
 template< struct TIter , typename TPred >
 void sort( TIter it , itend , TPred predic ); // 'it,itend' is an iterator <TIter>
+```
+```
+//no ugly ( a:int32 , b:int32 )
 ```
 __________
 ## Namespaces
