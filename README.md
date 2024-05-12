@@ -947,7 +947,7 @@ ___
 return( condition ? if_true : if_false );
 ```
 ```
-return( condition ?: if_false ); //same as ( condition-value == true ? condition-value : if_false ), like 'elvis operator in Kotlin language'
+return( condition ?: if_false ); //same as ( condition_result == true ? condition_result : if_false ), like 'elvis operator in Kotlin language'
 ```
 ________
 ## Literals
@@ -1053,6 +1053,22 @@ void some( int32 aa ) {
         //some literal stuff too...
     }
 }
+```
+literal fields
+```
+struct A
+{
+    literal int32 Value; //ERROR! no literal as field
+
+    void func( literal int32 ); //OK
+
+    void func( interal int32 )literal; //OK, literal method
+};
+class B
+{
+    literal int32 Limit; //ERROR! no literal as field
+    char Text[Limit]; //ERROR! how to detect 'sizeof' ??
+};
 ```
 ___________________
 ## Literal expressions
