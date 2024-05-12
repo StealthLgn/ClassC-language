@@ -139,25 +139,25 @@ func (me*MyStruct) function()
 }
 //in ClassC lang not allowed
 ```
-_______________
+___
 ## Header files
 definitions
 ```
 <myheader.ch>
 ```
-_______________
+___
 ## Module files
 translation units
 ```
 <mymodule.cc>
 ```
-_____
+___
 ## Comments
 ### C-style
 ```
 /**
  * Multi line documentations
-*/
+ */
 ```
 ### C++ style
 ```
@@ -190,7 +190,7 @@ __LINE__ //line number; very important for testing/debugging/error handling
 
 __CLASSC_NOEXTENSIONS__ //if extensions are disabled by compiler
 ```
-__________
+___
 ## Data types
 *  bool
 ```
@@ -318,7 +318,7 @@ no data, used as return in functions
 ```
 //in future int128...maybe...
 ```
-__________
+___
 ## Structures
 ```
 [struct] keyword
@@ -360,7 +360,7 @@ no virtual/pure virtual methods //compiler error
 struct S const {...}; //[const] after struct name
 can be an immutability type
 ```
-_______
+___
 ## Classes
 ```
 [class] keyword
@@ -383,7 +383,45 @@ allow to use virtual base classes
 allow to use virtual methods, pure virtual methods
 allow to use virtual destructors
 ```
-____________
+___
+## Access Specifiers
+```
+[public[ keyword
+[protected[ keyword
+[private[ keyword
+```
+same as C++, but...
+```
+struct A
+{
+    public: //OK, struct can contains access specifiers
+    protected:
+    private:
+};
+struct B :public A //OK, public inheritance
+{
+    public:
+
+        int32 a,b,c; //OK, public attributes (fields)
+
+        private int32 d; //OK, keep public section, but attribute 'd' is private
+
+        int32 len,count; //OK, 'len' and 'count' is public
+
+    private:
+
+        ~B(); //OK, private destructor
+};
+class AA
+{
+    public:
+
+        AA();
+
+        protected AA( const AA& ); //OK, protected copy constructor
+};
+```
+___
 ## Immutability
 ```
 [const] keyword
