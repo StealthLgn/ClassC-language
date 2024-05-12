@@ -473,6 +473,47 @@ allow to use virtual methods, pure virtual methods
 allow to use virtual destructors
 ```
 ___
+## Nested types
+```
+struct A
+{
+    struct B //struct 'B' is friend for struct 'A' by default
+    {
+        B( A& aa )
+        {
+            aa.m_private = 0; //OK, friend access to private attributes
+        }
+
+        private bool m_flag;
+    };
+
+    private int32 m_private;
+
+    A( B& bb )
+    {
+        bb.m_flag = false; //ERROR! no access to private field
+    }
+};
+class C
+{
+    class D //class 'D' is friend for class 'C' by default
+    {
+    };
+
+    class E :public C // ? ? ?
+    {
+    };
+
+    enum MyEnum //OK
+    {
+    };
+
+    interface IFace //OK
+    {
+    };
+};
+```
+___
 ## Access Specifiers
 ```
 [public] keyword
