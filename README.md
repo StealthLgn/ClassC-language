@@ -11,12 +11,8 @@ __________
 ## Principles
 
     1.Encapsulation
-    //prevent change state outside of object
-    //only object knows how it's changed
-    //the object must have an idea and purpose
     
     2.Composition
-    //~40% of code should be a constructors
 
 !! STOP FLEXIBILITY !!
 INFLEXIBLE LANGUAGE
@@ -28,7 +24,10 @@ more 'discipline code'
 ```
 ____
 ## Encapsulation
-hold data/state and behavior together inside an object
+hold data/state and behavior together inside an object\
+prevent change state outside of object\
+only object knows how it's changed\
+the object must have an idea and purpose
 ```
 class X
 {
@@ -51,9 +50,9 @@ void main()
 ```
 each 'set_data', 'set_name', 'set_*' broke encapsulation\
 this is not an object - it's a data structure\
-if object have no-state, he don't need encapsulation -- only state+behavior require encapsulation
+if object have no-state, he don't need an encapsulation -- only state+behavior requires encapsulation
 ```
-std::vector, std::map, std::list - this is all data 'struct', it's not an objects; they are not independent
+std::vector, std::map, std::list - this is all data 'struct', it's not an objects; they are not independent -- need to push/pop data
 
 class Widget
 {
@@ -66,6 +65,7 @@ class Widget
 ```
 ______
 ## Composition
+~40% of code should be a constructors\
 make attributes as objects
 ```
 inheritance vs. composition
