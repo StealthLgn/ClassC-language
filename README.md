@@ -1329,6 +1329,14 @@ class File
     void swap( File& f ); //OK, operator=, swap(), merge()
 };
 ```
+C# lang static classes
+```
+//class with only static functions ?? this is not a class !!
+namespace StaticClass
+{
+    //this is a namespace
+}
+```
 ____
 ## Non-Copyable
 ```
