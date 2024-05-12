@@ -338,6 +338,25 @@ no data, used as return in functions
 //in future int128...maybe...
 ```
 ___
+## Declarations
+```
+[category] [name] [specifiers] {  } ;
+```
+```
+[category]
+enum
+struct
+interface
+class
+namespace
+```
+```
+[specifiers]
+const
+static
+true
+```
+___
 ## Structures
 ```
 [struct] keyword
@@ -373,10 +392,25 @@ can't contains any virtual code:
 no virtual destructor //compiler error
 no virtual base class (like classes, interfaces)
 no virtual/pure virtual methods //compiler error
+struct A
+{
+    virtual ~A(); //ERROR! no virtual methods/destructors
+};
+struct B :public A
+{
+};
+struct C :public virtual A //ERROR! not virtual base types
+{
+};
+struct D :protected virtual B, protected virtual C //ERROR! not virtual base types
+{
+};
 ```
 *  immutability
 ```
-struct S const {...}; //[const] after struct name
+struct S const //[const] after struct name
+{
+};
 can be an immutability type
 ```
 ___
@@ -423,7 +457,7 @@ struct B :public A //OK, public inheritance
 
         int32 a,b,c; //OK, public attributes (fields)
 
-        private int32 d; //OK, keep public section, but attribute 'd' is private
+        private int32 d; //OK, keep public section, but attribute 'd' is private (private without ':')
 
         int32 len,count; //OK, 'len' and 'count' is public
 
@@ -535,6 +569,11 @@ class A
 disable C-style cast ((type)(other))
 allowed only in extern "C" {...} section for back-compat with C
 ```
+```
+struct A const mutable //ERROR! const type can't be a mutable
+{
+};
+```
 ___
 ## Read only attributes
 ```
@@ -601,6 +640,31 @@ extern "C"
         return( (int32*)p ); //OK, 'C' type cast allowed in extern "C" block
     }
 }
+```
+```
+struct UserDeclaration
+{
+    readonly const std::string name; //ERROR! 'const' with 'readonly' is not allowed
+
+    const std::string nickname; //OK, public const 'nickname' attribute
+
+    readonly int32 ping; //OK, public readonly 'ping' attribute
+
+    UserDeclaration( const std::string& strname , int32 pp ); //primary constructor
+
+    protected void update_ping( int32 );
+};
+struct DebugUserDeclaration :public UserDeclaration //OK, public struct inheritance
+{
+    DebugUserDeclaration( int32 pp )
+    {
+        UserDeclaration::ping = pp; //ERROR! readonly attributes is private
+
+        update_ping( pp ); //OK, call protected mutator-method to change attribute
+    }
+
+    DebugUserDeclaration( const std::string& strname , int32 pp ) :UserDeclaration( strname , pp ) {;} //OK, use primary constructor of base type
+};
 ```
 ___
 ## Interfaces
@@ -702,11 +766,9 @@ copy( FileStream() , MemoryStream() ); //OK, create temp objects on stack (no 'c
 ```
 [dynamic_cast] keyword
 !! REMOVED !!
-dynamic_cast searching a dervied class...
-how ?? by vtable ?? dont touch vtable !!
 no down casting
 ```
-________
+___
 ## Override
 ```
 [override] keyword
@@ -727,7 +789,7 @@ class C :public B
     override dump( ostream& )const; //OK, no return value required, because base class
 };
 ```
-__________
+___
 ## Exceptions
 ```
 [try] keyword removed
@@ -901,6 +963,10 @@ template< typename A , typename B > void some()
     { ... }
     literal if (typename(A) == typename(B))
     { ... }
+    literal if (A == variableA) //ERROR! type to value checking
+    { ... }
+    literal if (A == typedef(variableA)) //OK, use 'typedef()' keyword to deduce type of 'variableA'
+    { ... }
 }
 ```
 ____
@@ -922,7 +988,7 @@ static_assert; //without parameters
 always compilation error
 can be used only inside 'literal if' statements
 ```
-________________
+___
 ## Move constructor
 ```
 class A
@@ -937,12 +1003,12 @@ void main()
 
     //do stuff
 
-    A othera &&= somea; // 'operator &&=' call a move constructor (no 'static_cast< TYPE&& >' is needed)
+    A othera &&= somea; // 'operator &&=' call a move constructor (no 'static_cast< TYPE&& >' is needed); move constructor should be defined
 
-    othera &&= A(); // 'operator &&=' call move assignment operator 'operator=(&&)'
+    othera &&= A(); // 'operator &&=' call move assignment operator 'operator=(&&)'; 'move assignment operator' should be defined
 }
 ```
-________
+___
 ## Typedef and decltype
 ```
 [typedef] keyword
@@ -953,7 +1019,9 @@ same as 'C/C++', but...
 template<class T> using type = .... //!! STOP USING 'using' aliases !!
 ```
 typedef unsigned int32  size_type;
-typedef template<typename T> MyTemplate<T,size_type>  MySizeTemplate;
+
+typedef template<typename T> MyTemplate<T,size_type>  MySizeTemplate; //OK, allow to 'typedef' use templates<T>
+
 MySizeTemplate<bool> // MyTemplate< bool , size_type >
 ```
 ```
@@ -983,11 +1051,15 @@ global scope
 ```
 template<typename T> void some( T xx , T yy )
 {
-    std::vector< typedef(xx) > arr; //OK, use [typedef()] keyword in template parameters to deduce type
+    std::vector< typedef(xx) > arr; //OK, use 'typedef()' keyword in template parameters to deduce type
 
-    std::vector< typedef(xx::method) > vec; //OK, use [typedef()] keyword to detect return value from 'xx::method'
+    std::vector< typedef(xx::method) > vec; //OK, use 'typedef()' keyword to deduce return type from 'xx::method'
 
-    std::vector< typedef(&xx::method) > pointers; //OK, use [typedef()] keyword to declare pointer-to-member typename
+    std::vector< typedef(&xx::method) > pointers; //OK, use 'typedef()' keyword to declare pointer-to-member type
+
+    std::vector< typedef(yy::attribute) > attrs; //OK, use 'typedef()' keyword to deduce return type from 'yy::attribute'
+
+    std::vector< typedef(&yy::attribute) > attrs; //OK, use 'typedef()' keyword to declare pointer-to-field type
 }
 ```
 ```
