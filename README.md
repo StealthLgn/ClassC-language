@@ -66,7 +66,7 @@ class Widget
 ```
 ______
 ## Composition
-combine attributes with objects
+make attributes as objects
 ```
 inheritance vs. composition
 
