@@ -343,6 +343,8 @@ keyword [long double] for back-campat with 'C'
 *  void
 ```
 no data, used as return in functions
+sizeof(void) == 0 //OK, zero size, no error
+alignof(void) == 0 //OK, no error
 ```
 ```
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
@@ -393,6 +395,15 @@ extern "C"
 
     //all types should be marked as 'extern_c' or 'pure_c' when compile
 }
+```
+```
+extern "C++" { } //ERROR! undefined "C++"
+```
+```
+extern "CC" { } //ERROR! undefined "CC"
+```
+```
+extern "ClassC" { } //ERROR! undefined "ClassC"
 ```
 ___
 ## User type declarations
@@ -660,10 +671,7 @@ class A
 };
 ```
 ```
-[const_cast] keyword
-!! REMOVED !!
-```
-```
+[const_cast] keyword !! REMOVED !!
 disable C-style cast ((type)(other))
 allowed only in extern "C" {...} section for back-compat with C
 ```
@@ -672,7 +680,7 @@ struct A const mutable //ERROR! const type can't be a mutable
 {
 };
 ```
-mutable template parameters
+mutable parameters in template functions
 ```
 template< typename T >
 void some( mutable T& v ) //non-const, non-literal, non-readonly T&
@@ -697,7 +705,7 @@ ___
 ```
 [readonly] keyword
 ```
-!! STOP USING getters/accessors !!\
+!! STOP using getters/accessors !!\
 !! STOP calling(naming) methods as get*... !!
 ```
 class Point2D
@@ -850,7 +858,7 @@ interface IReadable
 
     virtual unsigned int64 peek( void* , unsigned int64 size ); //OK, no '=0' required, it's pure virtual by default (because INTERFACE)
 
-    protected: virtual void hidden(); //ERROR! no access specifiers are allowed! interface is always public
+    protected virtual void hidden(); //ERROR! no access specifiers are allowed! interface are always public
 };
 ```
 ```
