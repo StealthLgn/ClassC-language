@@ -1127,26 +1127,6 @@ always compilation error
 can be used only inside 'literal if' statements
 ```
 ___
-## Move constructor
-```
-class A
-{
-    A( A&& other ); //!! move constructor is fantastic !!
-
-    this& operator= ( A&& ); //move assignment operator
-};
-void main()
-{
-    A somea;
-
-    //do stuff
-
-    A othera &&= somea; // 'operator &&=' call a move constructor (no 'static_cast< TYPE&& >' is needed); move constructor should be defined
-
-    othera &&= A(); // 'operator &&=' call move assignment operator 'operator=(&&)'; 'move assignment operator' should be defined
-}
-```
-___
 ## Typedef and decltype
 ```
 [typedef] keyword
@@ -1536,7 +1516,88 @@ M func()
     return( M() ); //ERROR! copy
 }
 ```
-____
+___
+## Constructors
+```
+//!! move constructor is fantastic !!
+class A
+{
+    A( A&& other );
+
+    this& operator= ( A&& ); //move assignment operator
+};
+void main()
+{
+    A aa;
+
+    //do stuff
+
+    A other &&= aa; // 'operator &&=' call a move constructor (no 'static_cast< TYPE&& >' is needed); move constructor should be defined
+
+    other &&= A(); // 'operator &&=' call move assignment operator 'operator=(&&)'; 'move assignment operator' should be defined
+
+    code( other ); //copy constructor
+    code( std::move( other ) ); //force move constructor
+    code( &&other ); //force move constructor
+
+    code( A() ); //move constructor, because temp variable 'A' on stack
+
+    const A ab;
+    code( ab ); //copy constructor
+    code( &&ab ); //ERROR! 'ab' is const - can't call 'move contructor'
+}
+void code( A );
+```
+//Generative constructors (from Dart lang)
+```
+class A
+{public:
+
+    readonly int32 px=0 , py=0; //default value is zero
+
+    //generative
+    A( this.px , this.py ); //no constructor body code
+
+    //overload constructor
+    A( const A& other ) :this( other.px , other.py ) {;}
+};
+void main()
+{
+    A aa( 0 , 1 );
+
+    A ab = { 0 , 1 };
+
+    A ac = aa;
+}
+```
+___
+## Move
+```
+void main()
+{
+    MyClass* some = new MyClass();
+
+    MyClass* other &&= some; //'move assignment operator' for pointers
+    //now 'other == some' and 'some == nullptr'
+}
+class Referenced
+{
+    private void* m_ptr;
+
+    //1)
+    Referenced( Referenced&& other )
+    {
+        m_ptr &&= other.m_ptr; //move pointer
+    }
+
+    //2)
+    Referenced( Referenced&& other )
+        : m_ptr( &&other.m_ptr ) //move pointer
+    {
+    }
+};
+```
+___
 ## THIS
 ```
 [this] keyword
@@ -1600,7 +1661,7 @@ class MyOutput :public Output
 
     virtual this& write( const void* , stream_size ); //ERROR! no 'this&' allowed in virtual functions (yet)
 
-    static this& get(); //ERROR! 'function get' is static, no object instance -- 'this' is not allowed
+    static this& get(); //ERROR! 'function get' is static, no object instance -- 'this&' is not allowed
     static this& get( MyOutput& ); //ERROR! same
     static MyOutput& get( MyOutput& ); //OK
 };
@@ -1610,11 +1671,13 @@ void main()
 
     cout << true; //OK, Output::operator<< (bool), return Output&
 
-    cout << 5; //OK, Output::operator<< (int32), return MyOutput& because return 'this', but this is a 'class MyOutput'
-    //equivalent to (static_cast<MyOutput&>( Output::operator<<( int32(5) ) ))
+    cout << 5; //OK, Output::operator<< (int32), return MyOutput& because return 'this&'
+    //equivalent to 'static_cast<MyOutput&>( cout.operator<<( int32(5) ) )'
     //operator<<(int) called from cout, which 'class MyOutput' so 'this&' is a 'MyOutput&'
 
     cout << Class(...); //OK, MyOutput::operator<< (const Class&)
+
+    cout << int32(0) << Class(...) << true; // Output<<(int32)[return:MyOutput]  MyOutput<<(Class)[return:MyOutput]  Output<<(bool)[return:Output]
 }
 ```
 ___
@@ -1642,6 +1705,11 @@ void main()
 void parallel()thread //corutine function
 {
 }
+```
+```
+?? void parallel()thread break { ... } ??
+
+?? void parallel()thread continue { ... } ??
 ```
 ____
 ## Enum
