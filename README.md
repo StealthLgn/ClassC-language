@@ -348,13 +348,13 @@ no data, used as return in functions
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
 //!! this keywords for backward compatibility with 'C' libraries and API !!
 ```
-*  pointer
+*  pointers
 ```
 int32* pointer = nullptr;
 void* some = pointer;
 auto* autoptr = some;
 ```
-*  reference
+*  references
 ```
 int32& ref = other;
 void& someref; //ERROR! not allowed 'void reference'
@@ -395,7 +395,7 @@ extern "C"
 }
 ```
 ___
-## Declarations
+## User type declarations
 ```
 [category] [name] [specifiers] {  } ;
 ```
@@ -405,7 +405,6 @@ enum
 struct
 interface
 class
-namespace
 ```
 ```
 [specifiers]
@@ -580,20 +579,18 @@ ___
 ```
 [const] keyword
 ```
-
 All user-types (struct,class) are mutable by default\
-They can change state
-
+They can change state\
 Immutability prevent this changes
 ```
 class MyClass const {...};
 struct MyStruct const {...};
 ```
-Type is still mutable in CONSTRUCTOR and DESTRUCTOR\
+Type is still mutable in CONSTRUCTORS and DESTRUCTOR\
 Between them no one can change they state (@see UNION section)
 ```
-struct Minimal const { //const-type declaration
-
+struct Minimal const//const-type declaration
+{
     unsigned int32 a,b; //can't be a const, becase need calc in constructor
     
     Minimal( unsigned int32 aa , unsigned int32 bb ) : a(aa) , b(bb) { //OK, initializator
@@ -784,6 +781,41 @@ struct DebugUserDeclaration :public UserDeclaration //OK, public struct inherita
     }
 
     DebugUserDeclaration( const std::string& strname , int32 pp ) :UserDeclaration( strname , pp ) {;} //OK, use primary constructor of base type
+};
+```
+___
+## Delete functions
+```
+[delete] keyword
+```
+```
+class MyClass
+{
+    MyClass() = delete; //ERROR! not allowed
+    private MyClass(); //OK, no need an implementation
+
+    MyClass& operator=( const MyClass& ) = delete; //ERROR! not allowed
+    private  this& operator=( const MyClass& ); //OK, delete 'copy assignment operator', no need an implementation
+
+    ~MyClass() = delete; //ERROR! not allowed
+
+    MyClass( MyClass&& move ) = delete; //ERROR! not allowed
+    private MyClass( MyClass&& ); //OK, delete 'move constructor', no need an implementation
+};
+```
+___
+## Default functions
+```
+[default] keyword
+```
+```
+class MyClass
+{
+    MyClass() = default; //ERROR! not allowed
+
+    MyClass& operator=( const MyClass& ) = default; //ERROR! not allowed
+
+    ~MyClass() = default; //ERROR! not allowed
 };
 ```
 ___
