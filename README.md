@@ -319,7 +319,8 @@ only 1(true) or 0(false) -- only one bit used
 *  float16
 ```
 16 bit float
-[0.xxx, 1.xxx] floating-point
+[0.xxx, 1.xxx] unsigned floating-point
+//ranges, graphics color channels
 ```
 *  float32
 ```
