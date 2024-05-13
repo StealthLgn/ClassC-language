@@ -1896,6 +1896,22 @@ enum Custom :MyClass //ERROR! base integer types only
 {
 };
 ```
+unnamed enums
+```
+enum
+{
+    ConstA,
+    ConstB,
+
+    //equivalent to 'extern literal int32 ConstA = 0;'
+    //equivalent to 'extern literal int32 ConstB = 1;'
+};
+enum :unsigned int64
+{
+    LargeConstA,
+    LargeConstB,
+};
+```
 ___
 ## Final
 ```
@@ -2273,6 +2289,7 @@ same as C++, but...
 void some( int32 limit )
 {
     int32 numbers[limit] = {0}; //allow to create static arrays from variable like C; !! ONLY IN FUNCTIONS/METHODS !!
+    //array will be allocated on stack: int32* numbers = (int32*)stackalloc( limit * sizeof(int32) ); ...; free(numbers);
 }
 struct Data
 {
@@ -2308,9 +2325,13 @@ class MyClass
         //return is not req
     }
 };
-int32 main() :return(int32 exitcode = 0) //declare auto variable
+int32 main() :return(int32 exitcode = -1) //declare auto variable
 {
-    //do stuff
+    //do stuff...
+
+    exitcode = 0; //auto variable 'exitcode' is available
+
+    //do more stuff...
 
     //will return 'exitcode' variable, no UB
 }
@@ -2320,7 +2341,7 @@ float32 func( float32 v ) :return(v) //by default return value 'v'
 
     if (v == 0)
     {
-        return; //stop here and return 'v' parameter
+        return; //stop here and return default 'v' parameter
     }
 
     v *= v;
