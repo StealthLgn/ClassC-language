@@ -405,6 +405,32 @@ extern "CC" { } //ERROR! undefined "CC"
 ```
 extern "ClassC" { } //ERROR! undefined "ClassC"
 ```
+global variables (!! avoid as possible !!)
+```
+extern const int32 GVariable;
+
+//multi global variables
+extern
+{
+    const int32 GOne; //extern const int32
+    const bool GTwo; //extern const bool
+    MyDump GOut; //extern MyDump
+}
+
+//in source code <cc> file
+const int32 GOne = 0;
+const bool GTwo = false;
+MyDump GOut;
+```
+```
+namespace stdext
+{
+    extern
+    {
+        const bool GCondition; //OK, extern const bool in 'namespace stdext'
+    }
+}
+```
 ___
 ## User type declarations
 ```
