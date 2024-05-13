@@ -1442,6 +1442,8 @@ namespace my
     protected:
 
         class Range {...}; //class 'Range' by any type declared inside 'my' namespace or sub-namespaces
+
+        #include <lib.ch> //all types from <lib> will be protected
 }
 ```
 ! namespace aliases is great !
@@ -1472,19 +1474,28 @@ ___
 ```
 ```
 #include <iostream>
-using namespace std; //OK, inject types from namespace 'std'
+using namespace std; //OK, inject public types from namespace 'std'
 ```
 ```
 #include <iostream>
 void main()
 {
-    using std::string; //OK, inject struct 'std::string' from namespace
+    using std::string; //OK, inject struct 'string' from namespace 'std'
 
     string text = "text";
 }
 ```
 ```
 template<> using type_name = ... //ERROR! use 'typedef' instead
+
+typedef
+    template<typename T> std::basic_string<T,std::char_traits<T>,StackAllocator<T>>
+    StackString;
+
+void main()
+{
+    StackString<char> str = "text";
+}
 ```
 ```
 class A
@@ -1503,7 +1514,7 @@ void main()
     bb.dump( ostream() ); //ERROR in C++, req 'using' keyword; OK in 'ClassC' lang
 
     //C++ solution
-    //static_cast<A&>(bb).dump( ostream() ); --for what all this ??
+    //static_cast<A&>(bb).dump( ostream() );
 }
 class C :public B
 {
