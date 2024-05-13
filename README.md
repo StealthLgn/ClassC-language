@@ -266,6 +266,7 @@ only 1(true) or 0(false) -- only one bit used
 ```
 16 bit integer
 //keyword [short] for back-campat with 'C'
+//extern "C" { short v; }
 [−32767, +32767]
 ```
 *  signed int16
@@ -282,6 +283,7 @@ only 1(true) or 0(false) -- only one bit used
 ```
 32 bit integer
 //keyword [int] for back-campat with 'C'
+//extern "C" { int v; }
 [−2147483647, +2147483647]
 ```
 *  signed int32
@@ -299,6 +301,7 @@ only 1(true) or 0(false) -- only one bit used
 64 bit integer
 [−9223372036854775807, +9223372036854775807]
 //keyword [long long] for back-campat with 'C'
+//extern "C" { long long v; }
 ```
 *  signed int64
 ```
@@ -322,6 +325,7 @@ only 1(true) or 0(false) -- only one bit used
 ```
 32 bit float
 //keyword [float] for back-campat with 'C'
+//extern "C" { float v; }
 ```
 *  float64
 ```
@@ -338,7 +342,8 @@ only 1(true) or 0(false) -- only one bit used
 *  double128
 ```
 128 bit double floating-point
-keyword [long double] for back-campat with 'C'
+//keyword [long double] for back-campat with 'C'
+//extern "C" { long double v; }
 ```
 *  void
 ```
