@@ -7,6 +7,7 @@ C-style a general-purpose class-oriented coding language
 //not programming language (programming == design, architecture,patterns)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)\
 //not a 'C++ killer' or some
+//compiled language
 __________
 ## Principles
 
@@ -346,6 +347,27 @@ no data, used as return in functions
 ```
 //!! no [long double], [long long float], [unsigned int float] or something else in non-C code !!
 //!! this keywords for backward compatibility with 'C' libraries and API !!
+```
+*  pointer
+```
+int32* pointer = nullptr;
+void* some = pointer;
+auto* autoptr = some;
+```
+*  reference
+```
+int32& ref = other;
+void& someref; //ERROR! not allowed 'void reference'
+auto& autoref = ref;
+```
+___
+## Type qualifier
+*  const
+```
+const void* pointer;
+void*const cpointer;
+const void*const ccptr;
+const int32& cref;
 ```
 ___
 ## extern "C"
