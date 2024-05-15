@@ -1397,7 +1397,7 @@ ___
 namespace std
 {
     //standart language library
-    //any user extensions in this namespace is !! NOT ALLOWED !!
+    //use 'stdext' namespace for extensions
 }
 ```
 ```
