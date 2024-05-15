@@ -360,13 +360,13 @@ alignof(void) == 0 //OK, no error
 ```
 int32* pointer = nullptr;
 void* some = pointer;
-auto* autoptr = some;
+auto autoptr = some;
 ```
 *  references
 ```
 int32& ref = other;
 void& someref; //ERROR! not allowed 'void reference'
-auto& autoref = ref;
+auto autoref = ref;
 ```
 ___
 ## Type qualifier
@@ -1675,6 +1675,12 @@ void main()
     A ab = { 0 , 1 };
 
     A ac = aa;
+}
+```
+```
+void main()
+{
+    MyOutput( MyFormat( MyText("") ) ).print(); //allow to create temp unnamed objects
 }
 ```
 ___
