@@ -1567,6 +1567,8 @@ class File
 {
     static void read( File& f ); //ERROR! can't use class type as parameter inside this class
 
+    static File& empty_instance(); //OK! return default empty object
+
     void swap( File& f ); //OK, operator=, swap(), merge()
 };
 ```
