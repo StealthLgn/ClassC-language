@@ -2397,6 +2397,24 @@ but now...
 3) free memory
 4) write 'nullptr' to 'p' (p == nullptr after delete); memory is lost now, no address
 ```
+delete void*;
+```
+interface IFace
+{
+    //methods
+};
+void main()
+{
+    IFace* ptr = &some_class;
+
+    delete ptr; //ERROR! interface couldn't be deleted
+
+    void* custom = ptr;
+    delete custom; //ERROR! can't delete 'void*'
+
+    int* iptr = (int*)custom; //ERROR! no C-style type casting
+}
+```
 ___
 ## Functions annotations/attributes
 ```
