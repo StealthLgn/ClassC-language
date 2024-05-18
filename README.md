@@ -32,7 +32,7 @@ ____
 ## Encapsulation
 hold data/state and behavior together inside an object\
 prevent change state outside of object\
-only object knows how it's changed\
+only object knows how it's change\
 the object must have an idea and purpose
 ```
 class X
@@ -45,7 +45,8 @@ class X
         }
 
     private:
-        int32 m_encapsulation;
+
+        int32 m_encapsulation; //!! close data and then open in 'set_data' !! bad idea !! what an idea of this class ? set_data ??
 };
 //same
 void main()
