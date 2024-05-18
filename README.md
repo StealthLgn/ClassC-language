@@ -2197,35 +2197,7 @@ extern "C"
     };
 }
 ```
-______________
-## std::allocator
-```
-namespace std
-{
-    typedef unsigned int32  streamsize; //for x32, yes 'unsigned'
-    typedef unsigned int64  streamsize; //for x64
-
-    typedef streamsize  memorysize;
-
-    interface allocator
-    {
-        //allocate memory block
-        virtual void* allocate( memorysize ) =0;
-
-        //free memory block
-        virtual bool deallocate( void* , memorysize ) =0;
-
-        //reallocate memory block from 'allocate' method
-        virtual void* reallocate( void* , memorysize ) =0;
-
-        //try to calculate size of block
-        virtual memorysize size( const void* )const =0;
-    };
-
-    static allocator& malloc; //global heap allocation
-}
-```
-____
+___
 ## While loop
 ```
 [while] keyword
@@ -2545,4 +2517,32 @@ ___
 ## namespace std
 ```
 remove std::locale
+```
+______________
+## std::allocator
+```
+namespace std
+{
+    typedef unsigned int32  streamsize; //for x32, yes 'unsigned'
+    typedef unsigned int64  streamsize; //for x64
+
+    typedef streamsize  memorysize;
+
+    interface allocator
+    {
+        //allocate memory block
+        virtual void* allocate( memorysize ) =0;
+
+        //free memory block
+        virtual bool deallocate( void* , memorysize ) =0;
+
+        //reallocate memory block from 'allocate' method
+        virtual void* reallocate( void* , memorysize ) =0;
+
+        //try to calculate size of block
+        virtual memorysize size( const void* )const =0;
+    };
+
+    static allocator& malloc; //global heap allocation
+}
 ```
