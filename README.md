@@ -24,7 +24,7 @@ flexibility does not equal opportunity
 more 'discipline code'
 ```
 ```
-support polymorphism
+support polymorphism (static,dynamic)
 support inheritance
 support abstraction
 ```
