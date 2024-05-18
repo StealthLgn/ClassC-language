@@ -404,11 +404,9 @@ extern "C"
 ```
 ```
 extern "C++" { } //ERROR! undefined "C++"
-```
-```
+
 extern "CC" { } //ERROR! undefined "CC"
-```
-```
+
 extern "ClassC" { } //ERROR! undefined "ClassC"
 ```
 global variables (!! avoid as possible !!)
@@ -761,7 +759,7 @@ ___
 class Point2D
 {public:
 
-    readonly int32 posx,posy; //private attributes, but opened for read-only outside; do not use 'get_posx()'
+    readonly int32 posx,posy; //private attributes, but opened for read-only outside; do not use/write 'get_posx()' or any 'get*'
 
     void move( int32 xx , int32 yy );
 };
@@ -1005,17 +1003,13 @@ ___
 ## Exceptions
 ```
 [try] keyword removed
-```
-```
+
 [catch] keyword removed
-```
-```
+
 [throw] keyword removed
-```
-```
+
 [nothrow] keyword removed
-```
-```
+
 [noexcept] keyword removed
 ```
 std::cout\
@@ -1028,8 +1022,6 @@ ____
 ## goto
 ```
 [goto] keyword removed :)
-```
-```
 but allowed in 'extern "C" {...}' for back-compat :(
 ```
 ```
@@ -1379,11 +1371,11 @@ bool func( const T& container )
 }
 ```
 ```
-//C++:
+//in C++:
 auto (*p)() -> int; // declares p as pointer to function returning int
 auto (*q)() -> auto = p; // declares q as pointer to function returning T, where T is deduced from the type of p
 
-//now:
+//in ClassC:
 int32 (*p)();
 typedef(p) (*q)(); //use [typedef()] keyword (instead of 'decltype') like normal function without ->[&(*...)]<-
 ```
@@ -1589,13 +1581,19 @@ class File
 
     void swap( File& f ); //OK, operator=, swap(), merge()
 };
+struct Data
+{
+    static void copy( const Data& from , Data& to ); //ERROR! can't use struct type as parameter inside this struct
+
+    void copy( const Data& from ); //OK, public message for copy
+};
 ```
 C# lang static classes
 ```
 //class with only static functions ?? this is not a class !!
 namespace StaticClass
 {
-    //this is a namespace
+    //this is a namespace, but not a 'static classes'
 }
 ```
 ____
@@ -1733,11 +1731,12 @@ ___
 ```
 [this] keyword
 ```
-[this] is now reference (not a pointer)
 ```
+// ?? [this] is now reference (not a pointer) ??
 class A
 {
     readonly std::string Username;
+
     A()
     {
         this.Username; //OK, no -> pointers
@@ -1818,7 +1817,7 @@ ___
 dangerous keyword
 ```
 ```
-thread(int32) PerThreadValue; //thread-local-storage variable
+thread<int32> PerThreadValue; //thread-local-storage variable
 ```
 ```
 ?? or use std::thread_local<int32> PerThreadValue ??
@@ -2075,6 +2074,7 @@ std::map< int32 , std::string > filter( const TCont& container );
 void main()
 {
     std::map ff = filter( std::list({"apple" , "avocado" , "banana"}) );
+    //ff is a 'std::map< int , std::string >'
 }
 ```
 ___
@@ -2187,6 +2187,7 @@ extern "C"
 {
     union //?? 'union' can be used only in 'extern "C"' sections ??
     {
+        //?? how to 'union as struct field' ??
     };
 }
 ```
@@ -2244,7 +2245,7 @@ void method()const
 
     //no 'while(true)', but allowed
 
-    //no 'for(;;)', but allowed
+    //no 'for( ; ; )', but allowed
 }
 ```
 ___
@@ -2351,7 +2352,7 @@ class MyClass
         //return is not req
     }
 };
-int32 main() :return(int32 exitcode = -1) //declare auto variable
+int32 main() :return(int32 exitcode = -1) //declare auto variable; must be initialized
 {
     //do stuff...
 
