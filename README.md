@@ -5,7 +5,7 @@ in-progress
 C-style a general-purpose class-oriented coding language
 
 //not programming language (programming == design, architecture,patterns)\
-//not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)\
+//not object-oriented but close (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)\
 //not a 'C++ killer' or some\
 //compiled language
 __________
@@ -22,6 +22,11 @@ flexibility does not equal opportunity
 ```
 ```
 more 'discipline code'
+```
+```
+support polymorphism
+support inheritance
+support abstraction
 ```
 ____
 ## Encapsulation
