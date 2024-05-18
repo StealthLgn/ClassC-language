@@ -169,7 +169,7 @@ ___
 ### C++ style
 ```
 //inline comments
-//try to minimize comments in your code
+//minimize comments in code as posible
 ```
 ____
 ## Preprocessor
