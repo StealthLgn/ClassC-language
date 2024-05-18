@@ -322,11 +322,15 @@ only 1(true) or 0(false) -- only one bit used
 ```
 //in future int128...maybe...
 ```
+*  float8
+```
+8 bit float
+[0.xxx, 1.xxx] unsigned floating-point
+//ranges, graphics color channels
+```
 *  float16
 ```
 16 bit float
-[0.xxx, 1.xxx] unsigned floating-point
-//ranges, graphics color channels
 ```
 *  float32
 ```
