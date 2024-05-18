@@ -6,7 +6,7 @@ C-style a general-purpose class-oriented coding language
 
 //not programming language (programming == design, architecture,patterns)\
 //not object-oriented (OOP it's about a messages [SMALLTALK], no types, no classes, no dots)\
-//not a 'C++ killer' or some
+//not a 'C++ killer' or some\
 //compiled language
 __________
 ## Principles
@@ -490,9 +490,9 @@ struct D :public CC //ERROR! CC is a 'class', only 'struct' allowed
 *  no-virtual
 ```
 can't contains any virtual code:
-no virtual destructor //compiler error
+no virtual destructor
 no virtual base class (like classes, interfaces)
-no virtual/pure virtual methods //compiler error
+no virtual/pure virtual methods
 struct A
 {
     virtual ~A(); //ERROR! no virtual methods/destructors
@@ -537,6 +537,24 @@ can be an immutability type
 allow to use virtual base classes
 allow to use virtual methods, pure virtual methods
 allow to use virtual destructors
+```
+*  behavior
+```
+atleast one method
+class A
+{
+    //ERROR! add atleast one method/message
+};
+class B
+{
+    public:
+
+        void message(); //OK, public message
+
+    private:
+
+        void method(); //OK, private method
+};
 ```
 ___
 ## Nested types
