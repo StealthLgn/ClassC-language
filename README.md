@@ -2231,6 +2231,25 @@ void method()const
 }
 ```
 ___
+## Do
+```
+do
+{
+}
+while; //loop
+```
+```
+do(3)
+{
+    //do code '3' times
+}
+unsigned int32 count = 16;
+do(count)
+{
+    //do code 'count' times
+}
+```
+___
 ## Size OF
 ```
 [sizeof] keyword
